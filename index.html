@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>60's Style Flashcard Sliding</title>
+<style>
+  body {
+    background: #f1e7dc;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    margin: 0;
+  }
+
+  .flashcard-container {
+    width: 360px;
+    height: 230px;
+    overflow: hidden;
+    border-radius: 20px;
+    box-shadow:
+      0 8px 18px rgba(0,0,0,0.25),
+      inset 0 0 30px rgba(255, 255, 255, 0.15);
+    position: relative;
+    background-image: url('IMG-20250819-170059-467.jpg');
+    background-size: cover;
+    background-position: center;
+  }
+
+  .overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(50, 37, 25, 0.6); /* более тёмный для читаемости */
+    border-radius: 20px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .content-wrapper {
+    position: relative;
+    color: #f0ead8;
+    height: 100%;
+    padding: 30px 28px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    z-index: 1;
+    /* Фон под текст для контраста */
+    background: rgba(164, 135, 107, 0.5); /* тёплый мокко полупрозрачный */
+    border-radius: 16px;
+  }
+
+  .flashcards-wrapper {
+    display: flex;
+    width: 720px; /* 2 cards side by side */
+    height: 100%;
+    border-radius: 20px;
+    transition: transform 0.7s ease-in-out;
+  }
+
+  .flashcard-side {
+    flex: 0 0 360px;
+    height: 100%;
+    color: #f5f1ea;
+    box-sizing: border-box;
+    text-shadow: 1.5px 1.5px 3px rgba(0,0,0,0.6);
+    background: transparent !important; /* скрываем фон, т.к. общий фон у контейнера */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0;
+  }
+
+  .title {
+    font-weight: 700;
+    font-size: 26px;
+    margin-bottom: 14px;
+    line-height: 1.2;
+  }
+
+  .content {
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 1.45;
+  }
+
+  .emoji {
+    font-size: 24px;
+    margin-right: 10px;
+    vertical-align: middle;
+  }
+  
+  button {
+    margin-top: 20px;
+    background: rgba(164, 135, 107, 0.75);
+    border: none;
+    color: #f5f1ea;
+    padding: 12px 28px;
+    border-radius: 20px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  }
+  button:hover {
+    background: rgba(164, 135, 107, 1);
+  }
+</style>
+</head>
+<body>
+
+<div class="flashcard-container" aria-label="Flashcard">
+  <div class="overlay"></div>
+  <div class="flashcards-wrapper" id="flashcardsWrapper">
+    <div class="flashcard-side flashcard-front" aria-labelledby="titleFront" aria-describedby="descFront">
+      <div class="content-wrapper">
+        <div class="title" id="titleFront">Mixed feelings — contradictory or conflicting emotions</div>
+        <div class="content"><span class="emoji" aria-hidden="true">🫨</span> If you have mixed feelings about something, you are uncertain because you have both positive and negative emotions.</div>
+      </div>
+    </div>
+    <div class="flashcard-side flashcard-back" aria-labelledby="titleBack" aria-describedby="descBack">
+      <div class="content-wrapper">
+        <div class="title" id="titleBack">Example Usage</div>
+        <div class="content">After hearing the news, she had mixed feelings — happy for her friend but sad for herself.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<button id="toggleBtn" aria-pressed="false" aria-label="Show example usage">Next</button>
+
+<script>
+  const wrapper = document.getElementById('flashcardsWrapper');
+  const btn = document.getElementById('toggleBtn');
+  let shownBack = false;
+
+  btn.addEventListener('click', () => {
+    shownBack = !shownBack;
+    if (shownBack) {
+      wrapper.style.transform = 'translateX(-360px)';
+      btn.textContent = 'Back';
+      btn.setAttribute('aria-label', 'Show definition');
+    } else {
+      wrapper.style.transform = 'translateX(0)';
+      btn.textContent = 'Next';
+      btn.setAttribute('aria-label', 'Show example usage');
+    }
+    btn.setAttribute('aria-pressed', shownBack);
+  });
+</script>
+
+</body>
+</html>
