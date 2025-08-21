@@ -1,1529 +1,251 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Describing Emotions and Feelings - Flashcard</title>
+<title>Describing Emotions and Feelings - Flashcards</title>
 <style>
-  /* Фон всего проекта */
   body {
-    background-image: url('img/IMG_20250820_221358_590.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
     margin: 0;
+    font-family: Arial, sans-serif;
+    background: url('img/IMG_20250820_221358_590.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: #fff;
     min-height: 100vh;
-    font-family: 'Helvetica Neue', Arial, sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 40px 20px 20px;
-    color: #4b3a23;
+    justify-content: flex-start;
+    padding: 20px;
   }
-
-  /* Заголовок */
-  .topic {
-    font-weight: 900;
-    font-size: 38px;
-    color: #5b3a00;
+  h1 {
+    margin-bottom: 30px;
+    text-shadow: 2px 2px 6px #000;
     user-select: none;
-    margin-bottom: 36px;
-    text-shadow:
-      0 0 5px #ff9f00,
-      0 0 10px #ff8c00,
-      0 0 20px #ff7a00,
-      0 0 30px #ff6600,
-      0 0 40px #ff5500,
-      0 0 50px #ff4400;
   }
-
-  /* Контейнер карточек */
-  .flashcard-container {
-    width: 360px;
-    height: 230px;
-    border-radius: 20px;
+  .card {
+    width: 320px;
+    height: 440px;
     position: relative;
-    overflow: hidden;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.5);
-    color: #ffd966;
-  }
-
-  .overlay {
-    position: absolute;
-    inset: 0;
-    background: rgba(50, 37, 25, 0.65);
-    border-radius: 20px;
-    pointer-events: none;
-    z-index: 0;
-  }
-
-/* Лента карточек */
-  .flashcards-wrapper {
-    display: flex;
-    width: 27360px; /* 38 карточек × 2 стороны × 360px */
-    height: 100%;
-    border-radius: 20px;
-    transition: transform 0.7s ease-in-out;
-    position: relative;
-    z-index: 1;
-  }
-
-  /* Каждая сторона карточки */
-  .flashcard-side {
-    flex: 0 0 360px;
-    height: 100%;
-    box-sizing: border-box;
     background-size: cover;
     background-position: center;
-    background-repeat: no-repeat;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.7);
+    padding: 20px;
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    padding: 30px 28px;
-    color: #ffd966;
-    text-shadow: 1.5px 1.5px 3px rgba(0,0,0,0.85);
-    position: relative;
-    z-index: 1;
-    border-radius: 20px;
-  }
-
-  /* Фоны карточек - локальные пути */
-  .front-1 {
-    background-image: url('img/IMG_20250819_153902_853.jpg');
-    box-shadow: inset 0 0 40px rgba(255, 140, 0, 0.5);
-  }
-  .back-1 {
-    background-image: url('img/IMG_20250819_153902_853.jpg');
-    box-shadow: inset 0 0 40px rgba(255, 140, 0, 0.7);
-  }
-
-  .front-2 {
-    background-image: url('img/IMG_20250819_154021_177.jpg');
-    box-shadow: inset 0 0 40px rgba(50, 30, 10, 0.5);
-  }
-  .back-2 {
-    background-image: url('img/IMG_20250819_154021_177.jpg');
-    box-shadow: inset 0 0 40px rgba(50, 30, 10, 0.7);
-  }
-
-  .front-3 {
-    background-image: url('img/IMG_20250819_161039_279.jpg');
-    box-shadow: inset 0 0 40px rgba(160, 110, 50, 0.5);
-  }
-  .back-3 {
-    background-image: url('img/IMG_20250819_161039_279.jpg');
-    box-shadow: inset 0 0 40px rgba(160, 110, 50, 0.7);
-  }
-
-  .front-4 {
-    background-image: url('img/IMG_20250819_154217_837.jpg');
-    box-shadow: inset 0 0 40px rgba(80, 60, 40, 0.5);
-  }
-  .back-4 {
-    background-image: url('img/IMG_20250819_154217_837.jpg');
-    box-shadow: inset 0 0 40px rgba(80, 60, 40, 0.7);
-  }
-
-  .front-5 {
-    background-image: url('img/IMG_20250819_154300_255.jpg');
-    box-shadow: inset 0 0 40px rgba(130, 90, 45, 0.5);
-  }
-  .back-5 {
-    background-image: url('img/IMG_20250819_154300_255.jpg');
-    box-shadow: inset 0 0 40px rgba(130, 90, 45, 0.7);
-  }
-
-  .front-6 {
-    background-image: url('img/IMG_20250819_154404_671.jpg');
-    box-shadow: inset 0 0 40px rgba(85, 60, 40, 0.5);
-  }
-  .back-6 {
-    background-image: url('img/IMG_20250819_154404_671.jpg');
-    box-shadow: inset 0 0 40px rgba(85, 60, 40, 0.7);
-  }
-
-  .front-7 {
-    background-image: url('img/IMG_20250819_154457_623.jpg');
-    box-shadow: inset 0 0 40px rgba(120, 70, 40, 0.5);
-  }
-  .back-7 {
-    background-image: url('img/IMG_20250819_154457_623.jpg');
-    box-shadow: inset 0 0 40px rgba(120, 70, 40, 0.7);
-  }
-
-  .front-8 {
-    background-image: url('img/IMG_20250819_154642_439.jpg');
-    box-shadow: inset 0 0 40px rgba(90, 60, 60, 0.5);
-  }
-  .back-8 {
-    background-image: url('img/IMG_20250819_154642_439.jpg');
-    box-shadow: inset 0 0 40px rgba(90, 60, 60, 0.7);
-  }
-
-  .front-9 {
-    background-image: url('img/IMG_20250819_154959_504.jpg');
-    box-shadow: inset 0 0 40px rgba(100, 90, 70, 0.5);
-  }
-  .back-9 {
-    background-image: url('img/IMG_20250819_154959_504.jpg');
-    box-shadow: inset 0 0 40px rgba(100, 90, 70, 0.7);
-  }
-
-  .front-10 {
-    background-image: url('img/IMG_20250819_155025_976.jpg');
-    box-shadow: inset 0 0 40px rgba(80, 70, 50, 0.5);
-  }
-  .back-10 {
-    background-image: url('img/IMG_20250819_155025_976.jpg');
-    box-shadow: inset 0 0 40px rgba(80, 70, 50, 0.7);
-  }
-
-  .front-11 {
-    background-image: url('img/IMG_20250819_155924_217.jpg');
-    box-shadow: inset 0 0 40px rgba(110, 65, 40, 0.5);
-  }
-  .back-11 {
-    background-image: url('img/IMG_20250819_155924_217.jpg');
-    box-shadow: inset 0 0 40px rgba(110, 65, 40, 0.7);
-  }
-
-  .front-12 {
-    background-image: url('img/IMG_20250819_155751_957.jpg');
-    box-shadow: inset 0 0 40px rgba(90, 90, 70, 0.5);
-  }
-  .back-12 {
-    background-image: url('img/IMG_20250819_155751_957.jpg');
-    box-shadow: inset 0 0 40px rgba(90, 90, 70, 0.7);
-  }
-
-  .front-13 {
-    background-image: url('img/IMG_20250819_155835_804.jpg');
-    box-shadow: inset 0 0 40px rgba(105, 80, 55, 0.5);
-  }
-  .back-13 {
-    background-image: url('img/IMG_20250819_155835_804.jpg');
-    box-shadow: inset 0 0 40px rgba(105, 80, 55, 0.7);
-  }
-
-  .front-14 {
-    background-image: url('img/IMG_20250819_155124_054.jpg');
-    box-shadow: inset 0 0 40px rgba(80, 50, 60, 0.5);
-  }
-  .back-14 {
-    background-image: url('img/IMG_20250819_155124_054.jpg');
-    box-shadow: inset 0 0 40px rgba(80, 50, 60, 0.7);
-  }
-
-  .front-15 {
-    background-image: url('img/IMG_20250819_163734_377.jpg');
-    box-shadow: inset 0 0 40px rgba(120, 55, 40, 0.5);
-  }
-  .back-15 {
-    background-image: url('img/IMG_20250819_163734_377.jpg');
-    box-shadow: inset 0 0 40px rgba(120, 55, 40, 0.7);
-  }
-
-  .front-16 {
-    background-image: url('img/IMG_20250819_160128_993.jpg');
-    box-shadow: inset 0 0 40px rgba(90, 60, 40, 0.5);
-  }
-  .back-16 {
-    background-image: url('img/IMG_20250819_160128_993.jpg');
-    box-shadow: inset 0 0 40px rgba(90, 60, 40, 0.7);
-  }
-
-  .front-17 {
-    background-image: url('img/IMG_20250819_160215_377.jpg');
-    box-shadow: inset 0 0 40px rgba(100, 70, 50, 0.5);
-  }
-  .back-17 {
-    background-image: url('img/IMG_20250819_160215_377.jpg');
-    box-shadow: inset 0 0 40px rgba(100, 70, 50, 0.7);
-  }
-
-  .front-18 {
-    background-image: url('img/IMG_20250819_170059_467.jpg');
-    box-shadow: inset 0 0 40px rgba(110, 80, 60, 0.5);
-  }
-  .back-18 {
-    background-image: url('img/IMG_20250819_170059_467.jpg');
-    box-shadow: inset 0 0 40px rgba(110, 80, 60, 0.7);
-  }
-
-  .front-19 {
-    background-image: url('img/IMG_20250819_155242_647.jpg');
-    box-shadow: inset 0 0 40px rgba(95, 60, 55, 0.5);
-  }
-  .back-19 {
-    background-image: url('img/IMG_20250819_155242_647.jpg');
-    box-shadow: inset 0 0 40px rgba(95, 60, 55, 0.7);
-  }
-
-  .front-20 {
-    background-image: url('img/IMG_20250819_155913_210.jpg');
-    box-shadow: inset 0 0 40px rgba(85, 55, 45, 0.5);
-  }
-  .back-20 {
-    background-image: url('img/IMG_20250819_155913_210.jpg');
-    box-shadow: inset 0 0 40px rgba(85, 55, 45, 0.7);
-  }
-
-  .front-21 {
-    background-image: url('img/IMG_20250819_163626_119.jpg');
-    box-shadow: inset 0 0 40px rgba(95, 65, 50, 0.5);
-  }
-  .back-21 {
-    background-image: url('img/IMG_20250819_163626_119.jpg');
-    box-shadow: inset 0 0 40px rgba(95, 65, 50, 0.7);
-  }
-
-  .front-22 {
-    background-image: url('img/IMG_20250819_161352_662.jpg');
-    box-shadow: inset 0 0 40px rgba(80, 70, 65, 0.5);
-  }
-  .back-22 {
-    background-image: url('img/IMG_20250819_161352_662.jpg');
-    box-shadow: inset 0 0 40px rgba(80, 70, 65, 0.7);
-  }
-
-  .front-23 {
-    background-image: url('img/IMG_20250819_162748_639.jpg');
-    box-shadow: inset 0 0 40px rgba(70, 60, 60, 0.5);
-  }
-  .back-23 {
-    background-image: url('img/IMG_20250819_162748_639.jpg');
-    box-shadow: inset 0 0 40px rgba(70, 60, 60, 0.7);
-  }
-
-  .front-24 {
-    background-image: url('img/IMG_20250819_162440_831.jpg');
-    box-shadow: inset 0 0 40px rgba(90, 55, 45, 0.5);
-  }
-  .back-24 {
-    background-image: url('img/IMG_20250819_162440_831.jpg');
-    box-shadow: inset 0 0 40px rgba(90, 55, 45, 0.7);
-  }
-
-  .front-25 {
-    background-image: url('img/IMG_20250819_163942_360.jpg');
-    box-shadow: inset 0 0 40px rgba(120, 55, 60, 0.5);
-  }
-  .back-25 {
-    background-image: url('img/IMG_20250819_163942_360.jpg');
-    box-shadow: inset 0 0 40px rgba(120, 55, 60, 0.7);
-  }
-
-  .front-26 {
-    background-image: url('img/IMG_20250819_155710_437.jpg');
-    box-shadow: inset 0 0 40px rgba(100, 65, 70, 0.5);
-  }
-  .back-26 {
-    background-image: url('img/IMG_20250819_155710_437.jpg');
-    box-shadow: inset 0 0 40px rgba(100, 65, 70, 0.7);
-  }
-
-  .front-27 {
-    background-image: url('img/IMG_20250819_162637_907.jpg');
-    box-shadow: inset 0 0 40px rgba(90, 50, 45, 0.5);
-  }
-  .back-27 {
-    background-image: url('img/IMG_20250819_162637_907.jpg');
-    box-shadow: inset 0 0 40px rgba(90, 50, 45, 0.7);
-  }
-
-  .front-28 {
-    background-image: url('img/IMG_20250819_160015_306.jpg');
-    box-shadow: inset 0 0 40px rgba(115, 90, 70, 0.5);
-  }
-  .back-28 {
-    background-image: url('img/IMG_20250819_160015_306.jpg');
-    box-shadow: inset 0 0 40px rgba(115, 90, 70, 0.7);
-  }
-
-  .front-29 {
-    background-image: url('img/IMG_20250819_160659_557.jpg');
-    box-shadow: inset 0 0 40px rgba(85, 60, 45, 0.5);
-  }
-  .back-29 {
-    background-image: url('img/IMG_20250819_160659_557.jpg');
-    box-shadow: inset 0 0 40px rgba(85, 60, 45, 0.7);
-  }
-
-  .front-30 {
-    background-image: url('img/IMG_20250819_163153_916.jpg');
-    box-shadow: inset 0 0 40px rgba(90, 55, 45, 0.5);
-  }
-  .back-30 {
-    background-image: url('img/IMG_20250819_163153_916.jpg');
-    box-shadow: inset 0 0 40px rgba(90, 55, 45, 0.7);
-  }
-
-  .front-31 {
-    background-image: url('img/IMG_20250819_163448_150.jpg');
-    box-shadow: inset 0 0 40px rgba(85, 60, 50, 0.5);
-  }
-  .back-31 {
-    background-image: url('img/IMG_20250819_163448_150.jpg');
-    box-shadow: inset 0 0 40px rgba(85, 60, 50, 0.7);
-  }
-
-  .front-32 {
-    background-image: url('img/IMG_20250819_163808_743.jpg');
-    box-shadow: inset 0 0 40px rgba(95, 65, 55, 0.5);
-  }
-  .back-32 {
-    background-image: url('img/IMG_20250819_163808_743.jpg');
-    box-shadow: inset 0 0 40px rgba(95, 65, 55, 0.7);
-  }
-
-  .front-33 {
-    background-image: url('img/IMG_20250819_163217_642.jpg');
-    box-shadow: inset 0 0 40px rgba(110, 70, 65, 0.5);
-  }
-  .back-33 {
-    background-image: url('img/IMG_20250819_163217_642.jpg');
-    box-shadow: inset 0 0 40px rgba(110, 70, 65, 0.7);
-  }
-
-  .front-34 {
-    background-image: url('img/IMG_20250819_164414_244.jpg');
-    box-shadow: inset 0 0 40px rgba(85, 50, 45, 0.5);
-  }
-  .back-34 {
-    background-image: url('img/IMG_20250819_164414_244.jpg');
-    box-shadow: inset 0 0 40px rgba(85, 50, 45, 0.7);
-  }
-
-  .front-35 {
-    background-image: url('img/IMG_20250819_163856_822.jpg');
-    box-shadow: inset 0 0 40px rgba(120, 70, 50, 0.5);
-  }
-  .back-35 {
-    background-image: url('img/IMG_20250819_163856_822.jpg');
-    box-shadow: inset 0 0 40px rgba(120, 70, 50, 0.7);
-  }
-
-  .front-36 {
-    background-image: url('img/IMG_20250819_163350_468.jpg');
-    box-shadow: inset 0 0 40px rgba(120, 75, 85, 0.5);
-  }
-  .back-36 {
-    background-image: url('img/IMG_20250819_163350_468.jpg');
-    box-shadow: inset 0 0 40px rgba(120, 75, 85, 0.7);
-  }
-
-  .front-37 {
-    background-image: url('img/IMG_20250819_163018_775.jpg');
-    box-shadow: inset 0 0 40px rgba(130, 80, 60, 0.5);
-  }
-  .back-37 {
-    background-image: url('img/IMG_20250819_163018_775.jpg');
-    box-shadow: inset 0 0 40px rgba(130, 80, 60, 0.7);
-  }
-
-  .front-38 {
-    background-image: url('img/IMG_20250819_165120_262.jpg');
-    box-shadow: inset 0 0 40px rgba(125, 90, 65, 0.5);
-  }
-  .back-38 {
-    background-image: url('img/IMG_20250819_165120_262.jpg');
-    box-shadow: inset 0 0 40px rgba(125, 90, 65, 0.7);
-    }
-  
-  .title {
-    font-weight: 700;
-    font-size: 26px;
-    margin-bottom: 14px;
-    line-height: 1.2;
-  }
-
-  .content {
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 1.45;
-  }
-
-  /* Светящийся пробел */
-  .interactive-blank {
-    display: inline-block;
-    margin: 0 4px;
-    padding: 2px 10px;
-    min-width: 120px;
-    max-width: 100%;
-    border-radius: 8px;
-    background: #663300;
-    box-shadow:
-      0 0 8px 3px rgba(255, 140, 0, 0.9);
-    cursor: pointer;
-    color: transparent;
+    justify-content: space-between;
+    backdrop-filter: brightness(0.6);
     user-select: none;
-    font-weight: 600;
-    animation: pulseOrange 2.2s infinite;
-    text-align: center;
-    white-space: nowrap;
-    height: 28px;
-    line-height: 28px;
   }
-
-  .interactive-blank.revealed {
-    animation: none;
-    color: #fff;
-    background: #a65e00;
-    box-shadow:
-      0 0 12px 6px rgba(255, 165, 0, 1),
-      0 0 20px 10px rgba(255, 140, 0, 0.8);
-    cursor: default;
-    padding-left: 0;
-    padding-right: 0;
-    white-space: normal;
-    text-shadow:
-      0 0 6px #ff9500,
-      0 0 12px #ff9500;
+  .front-text {
+    font-size: 20px;
+    line-height: 1.4;
+    outline: none;
   }
-
-  /* Ключевое слово ярко оранжевое с свечением */
-  .key-phrase {
-    color: #fff;
-    font-weight: 700;
-    font-style: italic;
-    text-shadow:
-      0 0 8px #ff9500,
-      0 0 18px #ff7400,
-      0 0 25px #ff6400;
+  .pulse-blank {
+    display: inline-block;
+    min-width: 110px;
+    border-bottom: 2px solid orange;
+    position: relative;
+    cursor: pointer;
+    animation: pulseOrange 2s infinite;
+    color: transparent;
   }
-
   @keyframes pulseOrange {
-    0% {
-      box-shadow:
-        0 0 6px 2px rgba(255, 140, 0, 0.9);
-      background: #663300;
-      color: transparent;
+    0%, 100% {
+      box-shadow: 0 0 8px 2px orange;
     }
     50% {
-      box-shadow:
-        0 0 20px 6px rgba(255, 165, 0, 1);
-      background: #804000;
-      color: transparent;
-    }
-    100% {
-      box-shadow:
-        0 0 6px 2px rgba(255, 140, 0, 0.9);
-      background: #663300;
-      color: transparent;
+      box-shadow: 0 0 12px 4px rgba(255, 165, 0, 0.7);
     }
   }
-
-  button#toggleBtn {
-    margin-top: 30px;
-    background: rgba(164, 135, 107, 0.75);
+  .keyphrase-popup {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0,0,0,0.85);
+    color: #ffa500;
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-size: 24px;
+    font-weight: bold;
+    max-width: 90%;
+    text-align: center;
+    white-space: nowrap;
+    box-shadow: 0 0 15px 5px orange;
+    z-index: 10;
+    display: none;
+  }
+  .back-text {
+    font-size: 16px;
+    background: rgba(0,0,0,0.6);
+    border-radius: 10px;
+    padding: 15px;
+    margin-top: 20px;
+    min-height: 60px;
+  }
+  .nav-buttons {
+    margin-top: 15px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+  button {
+    background: orange;
     border: none;
-    color: #f5f1ea;
-    padding: 12px 28px;
-    border-radius: 20px;
-    font-size: 18px;
+    padding: 10px 25px;
+    border-radius: 10px;
+    font-weight: bold;
     cursor: pointer;
-    transition: background 0.3s ease;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    color: black;
+    box-shadow: 0 0 6px 1px #ffb347;
+    transition: background-color 0.3s ease;
     user-select: none;
   }
-  button#toggleBtn:hover {
-    background: rgba(164, 135, 107, 1);
+  button:hover:not(:disabled) {
+    background: #ff9c00;
+  }
+  button:disabled {
+    opacity: 0.5;
+    cursor: default;
   }
 </style>
 </head>
 <body>
+  <h1>Describing Emotions and Feelings</h1>
 
-<div class="topic" aria-label="Общий заголовок набора карточек">Describing Emotions and Feelings</div>
-
-<div class="flashcard-container" aria-label="Flashcard set" role="region" aria-live="polite" aria-atomic="true">
-  <div class="overlay"></div>
-  <div class="flashcards-wrapper" id="flashcardsWrapper">
-
-    <!-- Карточка 1 -->
-    <div class="flashcard-side front-1" aria-labelledby="titleFront1" aria-describedby="descFront1">
-      <div class="title" id="titleFront1">
-        If you have 
-        <span 
-          class="interactive-blank" 
-          role="button" 
-          tabindex="0" 
-          aria-label="Интерактивный пробел, нажмите или нажмите Enter, чтобы увидеть ответ"
-          data-card="1"
-          id="blankArea1">&nbsp;</span> 
-        about something, you are uncertain because you have both positive and negative emotions.
-      </div>
-    </div>
-    <div class="flashcard-side back-1" aria-labelledby="titleBack1" aria-describedby="descBack1">
-      <div class="title" id="titleBack1">
-        • <span class="key-phrase">mixed feelings</span> — contradictory or conflicting emotions
-      </div>
+  <div id="flashcard" class="card" role="region" aria-label="Flashcard">
+    <div class="front-text" id="front-text" tabindex="0" aria-live="polite" aria-atomic="true">
+      <!-- Текст с пустым пробелом вставляется JS -->
     </div>
 
-    <!-- Карточка 2 -->
-    <div class="flashcard-side front-2" aria-labelledby="titleFront2" aria-describedby="descFront2">
-      <div class="title" id="titleFront2">
-        If you are
-        <span 
-          class="interactive-blank" 
-          role="button" 
-          tabindex="0" 
-          aria-label="Интерактивный пробел, нажмите или нажмите Enter, чтобы увидеть ответ"
-          data-card="2"
-          id="blankArea2">&nbsp;</span>
-        , you do not know what to do or say because you are confused or worried.
-      </div>
-    </div>
-    <div class="flashcard-side back-2" aria-labelledby="titleBack2" aria-describedby="descBack2">
-      <div class="title" id="titleBack2">
-        Be at a loss — to feel confused or uncertain about what to do
-      </div>
-    </div>
+    <div class="keyphrase-popup" id="keyphrase-popup" role="alert" aria-live="assertive" aria-atomic="true"></div>
 
-        <!-- Карточка 3 -->
-    <div class="flashcard-side front-3" aria-labelledby="titleFront3" aria-describedby="descFront3" style="background-image: url('img/IMG_20250819_161039_279.jpg'); box-shadow: inset 0 0 40px rgba(160, 110, 50, 0.5);">
-      <div class="title" id="titleFront3">
-        <span 
-          class="interactive-blank" 
-          role="button" 
-          tabindex="0" 
-          aria-label="Интерактивный пробел, нажмите или нажмите Enter, чтобы увидеть ответ"
-          data-card="3"
-          id="blankArea3">&nbsp;</span> 
-        means to feel nervous, tense, or easily upset.
-      </div>
-    </div>
-    <div class="flashcard-side back-3" aria-labelledby="titleBack3" aria-describedby="descBack3" style="background-image: url('img/IMG_20250819_161039_279.jpg'); box-shadow: inset 0 0 40px rgba(160, 110, 50, 0.7);">
-      <div class="title" id="titleBack3">
-        • <span class="key-phrase">Be on edge</span> — to feel nervous or anxious
-      </div>
-    </div>
+    <div class="back-text" id="back-text" style="display:none;"></div>
 
-    <!-- Карточка 4 -->
-    <div class="flashcard-side front-4" aria-labelledby="titleFront4" aria-describedby="descFront4" style="background-image: url('img/IMG_20250819_154217_837.jpg'); box-shadow: inset 0 0 40px rgba(80, 60, 40, 0.5);">
-      <div class="title" id="titleFront4">
-        If you are
-        <span 
-          class="interactive-blank" 
-          role="button" 
-          tabindex="0" 
-          aria-label="Интерактивный пробел, нажмите или нажмите Enter, чтобы увидеть ответ"
-          data-card="4"
-          id="blankArea4">&nbsp;</span>
-        about something, you are unable to decide what to do.
-      </div>
-    </div>
-    <div class="flashcard-side back-4" aria-labelledby="titleBack4" aria-describedby="descBack4" style="background-image: url('img/IMG_20250819_154217_837.jpg'); box-shadow: inset 0 0 40px rgba(80, 60, 40, 0.7);">
-      <div class="title" id="titleBack4">
-        • <span class="key-phrase">Be in two minds</span> — to be uncertain or undecided
-      </div>
-    </div>
-
-    <!-- Карточка 5 -->
-    <div class="flashcard-side front-5" aria-labelledby="titleFront5" aria-describedby="descFront5" style="background-image: url('img/IMG_20250819_154300_255.jpg'); box-shadow: inset 0 0 40px rgba(130, 90, 45, 0.5);">
-      <div class="title" id="titleFront5">
-        If you
-        <span 
-          class="interactive-blank" 
-          role="button" 
-          tabindex="0" 
-          aria-label="Интерактивный пробел, нажмите или нажмите Enter, чтобы увидеть ответ"
-          data-card="5"
-          id="blankArea5">&nbsp;</span>
-        , you manage to stay calm and control your emotions in a difficult or stressful situation.
-      </div>
-    </div>
-    <div class="flashcard-side back-5" aria-labelledby="titleBack5" aria-describedby="descBack5" style="background-image: url('img/IMG_20250819_154300_255.jpg'); box-shadow: inset 0 0 40px rgba(130, 90, 45, 0.7);">
-      <div class="title" id="titleBack5">
-        • <span class="key-phrase">Keep it together</span> — to stay calm and in control of one's emotions
-      </div>
-    </div>
-
-    <!-- Карточка 6 -->
-    <div class="flashcard-side front-6" aria-labelledby="titleFront6" aria-describedby="descFront6" style="background-image: url('img/IMG_20250819_154355_168.jpg'); box-shadow: inset 0 0 40px rgba(60, 40, 20, 0.5);">
-      <div class="title" id="titleFront6">
-        If you
-        <span 
-          class="interactive-blank" 
-          role="button" 
-          tabindex="0" 
-          aria-label="Интерактивный пробел, нажмите или нажмите Enter, чтобы увидеть ответ"
-          data-card="6"
-          id="blankArea6">&nbsp;</span>
-        , you are thinking a lot about your problems or worries.
-      </div>
-    </div>
-    <div class="flashcard-side back-6" aria-labelledby="titleBack6" aria-describedby="descBack6" style="background-image: url('img/IMG_20250819_154355_168.jpg'); box-shadow: inset 0 0 40px rgba(60, 40, 20, 0.7);">
-      <div class="title" id="titleBack6">
-        • <span class="key-phrase">Have a lot on one’s mind</span> — to be occupied with many thoughts, problems, or worries.
-      </div>
-    </div>
-
-        <!-- Карточка 7 -->
-    <div class="flashcard-side front-7" aria-labelledby="titleFront7" aria-describedby="descFront7" style="background-image: url('img/IMG_20250819_154457_623.jpg'); box-shadow: inset 0 0 40px rgba(120, 70, 40, 0.5);">
-      <div class="title" id="titleFront7">
-        If you
-        <span 
-          class="interactive-blank" 
-          role="button" 
-          tabindex="0" 
-          aria-label="Интерактивный пробел, нажмите или нажмите Enter, чтобы увидеть ответ"
-          data-card="7"
-          id="blankArea7">&nbsp;</span>
-        , you keep your feelings or emotions hidden instead of expressing them.
-      </div>
-    </div>
-    <div class="flashcard-side back-7" aria-labelledby="titleBack7" aria-describedby="descBack7" style="background-image: url('img/IMG_20250819_154457_623.jpg'); box-shadow: inset 0 0 40px rgba(120, 70, 40, 0.7);">
-      <div class="title" id="titleBack7">
-        • <span class="key-phrase">Bottle something up</span> — to keep one’s emotions or feelings inside without expressing them
-      </div>
-    </div>
-
-    <!-- Карточка 8 -->
-    <div class="flashcard-side front-8" aria-labelledby="titleFront8" aria-describedby="descFront8" style="background-image: url('img/IMG_20250819_154642_439.jpg'); box-shadow: inset 0 0 40px rgba(90, 60, 60, 0.5);">
-      <div class="title" id="titleFront8">
-        If you are
-        <span 
-          class="interactive-blank" 
-          role="button" 
-          tabindex="0" 
-          aria-label="Интерактивный пробел, нажмите или нажмите Enter, чтобы увидеть ответ"
-          data-card="8"
-          id="blankArea8">&nbsp;</span>
-        , you feel slightly unwell, tired, or not as happy as usual.
-      </div>
-    </div>
-    <div class="flashcard-side back-8" aria-labelledby="titleBack8" aria-describedby="descBack8" style="background-image: url('img/IMG_20250819_154642_439.jpg'); box-shadow: inset 0 0 40px rgba(90, 60, 60, 0.7);">
-      <div class="title" id="titleBack8">
-        • <span class="key-phrase">Be out of sorts</span> — to feel slightly unwell or not in good spirits
-      </div>
-    </div>
-
-    <!-- Карточка 9 -->
-    <div class="flashcard-side front-9" aria-labelledby="titleFront9" aria-describedby="descFront9" style="background-image: url('img/IMG_20250819_154959_504.jpg'); box-shadow: inset 0 0 40px rgba(100, 90, 70, 0.5);">
-      <div class="title" id="titleFront9">
-        If you
-        <span 
-          class="interactive-blank" 
-          role="button" 
-          tabindex="0" 
-          aria-label="Интерактивный пробел, нажмите или нажмите Enter, чтобы увидеть ответ"
-          data-card="9"
-          id="blankArea9">&nbsp;</span>
-        , you deal with a difficult or unpleasant situation calmly and without letting it upset you.
-      </div>
-    </div>
-    <div class="flashcard-side back-9" aria-labelledby="titleBack9" aria-describedby="descBack9" style="background-image: url('img/IMG_20250819_154959_504.jpg'); box-shadow: inset 0 0 40px rgba(100, 90, 70, 0.7);">
-      <div class="title" id="titleBack9">
-        • <span class="key-phrase">Take something in stride</span> — to deal with difficulties calmly and without stress
-      </div>
-    </div>
-
-    <!-- Карточка 10 -->
-    <div class="flashcard-side front-10" aria-labelledby="titleFront10" aria-describedby="descFront10" style="background-image: url('img/IMG_20250819_155025_976.jpg'); box-shadow: inset 0 0 40px rgba(80, 70, 50, 0.5);">
-      <div class="title" id="titleFront10">
-        If you
-        <span 
-          class="interactive-blank" 
-          role="button" 
-          tabindex="0" 
-          aria-label="Интерактивный пробел, нажмите или нажмите Enter, чтобы увидеть ответ"
-          data-card="10"
-          id="blankArea10">&nbsp;</span>
-        , you become confident and comfortable in a new situation or environment, especially after a period of adjustment.
-      </div>
-    </div>
-    <div class="flashcard-side back-10" aria-labelledby="titleBack10" aria-describedby="descBack10" style="background-image: url('img/IMG_20250819_155025_976.jpg'); box-shadow: inset 0 0 40px rgba(80, 70, 50, 0.7);">
-      <div class="title" id="titleBack10">
-        • <span class="key-phrase">Find one’s feet</span> — to become confident or comfortable in a new situation
-      </div>
-    </div>
-
-        <!-- Карточка 11 -->
-    <div class="flashcard-side front-11" aria-labelledby="titleFront11" aria-describedby="descFront11" style="background-image: url('img/IMG_20250819_155924_217.jpg'); box-shadow: inset 0 0 40px rgba(110, 65, 40, 0.5);">
-      <div class="title" id="titleFront11">
-        If you
-        <span 
-          class="interactive-blank" 
-          role="button" 
-          tabindex="0" 
-          aria-label="Интерактивный пробел, нажмите или нажмите Enter, чтобы увидеть ответ"
-          data-card="11"
-          id="blankArea11">&nbsp;</span>
-        steam, you express your feelings to reduce stress or anger.
-      </div>
-    </div>
-    <div class="flashcard-side back-11" aria-labelledby="titleBack11" aria-describedby="descBack11" style="background-image: url('img/IMG_20250819_155924_217.jpg'); box-shadow: inset 0 0 40px rgba(110, 65, 40, 0.7);">
-      <div class="title" id="titleBack11">
-        • <span class="key-phrase">Blow off steam</span> — to release strong emotions or frustration
-      </div>
-    </div>
-
-    <!-- Карточка 12 -->
-    <div class="flashcard-side front-12" aria-labelledby="titleFront12" aria-describedby="descFront12" style="background-image: url('img/IMG_20250819_155751_957.jpg'); box-shadow: inset 0 0 40px rgba(90, 90, 70, 0.5);">
-      <div class="title" id="titleFront12">
-        If you
-        <span 
-          class="interactive-blank" 
-          role="button" 
-          tabindex="0" 
-          aria-label="Интерактивный пробел, нажмите или нажмите Enter, чтобы увидеть ответ"
-          data-card="12"
-          id="blankArea12">&nbsp;</span>
-        , you try to find the positive or hopeful aspect of a situation that may seem bad or difficult.
-      </div>
-    </div>
-    <div class="flashcard-side back-12" aria-labelledby="titleBack12" aria-describedby="descBack12" style="background-image: url('img/IMG_20250819_155751_957.jpg'); box-shadow: inset 0 0 40px rgba(90, 90, 70, 0.7);">
-      <div class="title" id="titleBack12">
-        • <span class="key-phrase">Look on the bright side</span> — to focus on the positive aspects of a situation
-      </div>
-    </div>
-
-    <!-- Карточка 13 -->
-    <div class="flashcard-side front-13" aria-labelledby="titleFront13" aria-describedby="descFront13" style="background-image: url('img/IMG_20250819_155835_804.jpg'); box-shadow: inset 0 0 40px rgba(105, 80, 55, 0.5);">
-      <div class="title" id="titleFront13">
-        If you
-        <span 
-          class="interactive-blank" 
-          role="button" 
-          tabindex="0" 
-          aria-label="Интерактивный пробел, нажмите или нажмите Enter, чтобы увидеть ответ"
-          data-card="13"
-          id="blankArea13">&nbsp;</span>
-        , you share your worries or problems with someone to feel better.
-      </div>
-    </div>
-    <div class="flashcard-side back-13" aria-labelledby="titleBack13" aria-describedby="descBack13" style="background-image: url('img/IMG_20250819_155835_804.jpg'); box-shadow: inset 0 0 40px rgba(105, 80, 55, 0.7);">
-      <div class="title" id="titleBack13">
-        • <span class="key-phrase">Get something off one’s chest</span> — to talk about something that has been bothering someone
-      </div>
-    </div>
-
-    <!-- Карточка 14 -->
-    <div class="flashcard-side front-14" aria-labelledby="titleFront14" aria-describedby="descFront14" style="background-image: url('img/IMG_20250819_155124_054.jpg'); box-shadow: inset 0 0 40px rgba(80, 50, 60, 0.5);">
-      <div class="title" id="titleFront14">
-        If you say that someone
-        <span 
-          class="interactive-blank" 
-          role="button" 
-          tabindex="0" 
-          aria-label="Интерактивный пробел, нажмите или нажмите Enter, чтобы увидеть ответ"
-          data-card="14"
-          id="blankArea14">&nbsp;</span>
-        , you mean that they feel down or unhappy.
-      </div>
-    </div>
-    <div class="flashcard-side back-14" aria-labelledby="titleBack14" aria-describedby="descBack14" style="background-image: url('img/IMG_20250819_155124_054.jpg'); box-shadow: inset 0 0 40px rgba(80, 50, 60, 0.7);">
-      <div class="title" id="titleBack14">
-        • <span class="key-phrase">Feel blue</span> — to feel sad or depressed
-      </div>
-    </div>
-
-    <!-- Карточка 15 -->
-    <div class="flashcard-side front-15" aria-labelledby="titleFront15" aria-describedby="descFront15" style="background-image: url('img/IMG_20250819_163734_377.jpg'); box-shadow: inset 0 0 40px rgba(120, 55, 40, 0.5);">
-      <div class="title" id="titleFront15">
-        If you
-        <span 
-          class="interactive-blank" 
-          role="button" 
-          tabindex="0" 
-          aria-label="Интерактивный пробел, нажмите или нажмите Enter, чтобы увидеть ответ"
-          data-card="15"
-          id="blankArea15">&nbsp;</span>
-        , you suddenly become very angry and lose control of your emotions.
-      </div>
-    </div>
-    <div class="flashcard-side back-15" aria-labelledby="titleBack15" aria-describedby="descBack15" style="background-image: url('img/IMG_20250819_163734_377.jpg'); box-shadow: inset 0 0 40px rgba(120, 55, 40, 0.7);">
-      <div class="title" id="titleBack15">
-        • <span class="key-phrase">Lose one’s temper</span> — to suddenly become angry
-      </div>
-    </div>
-
-        <!-- Карточка 16 -->
-    <div class="flashcard-side front-16" aria-labelledby="titleFront16" aria-describedby="descFront16" style="background-image: url('img/IMG_20250819_160128_993.jpg'); box-shadow: inset 0 0 40px rgba(90, 60, 40, 0.5);">
-      <div class="title" id="titleFront16">
-        If you
-        <span 
-          class="interactive-blank" 
-          role="button" 
-          tabindex="0" 
-          aria-label="Интерактивный пробел, нажмите или нажмите Enter, чтобы увидеть ответ"
-          data-card="16"
-          id="blankArea16">&nbsp;</span>
-        , you stop being upset about it and move on.
-      </div>
-    </div>
-    <div class="flashcard-side back-16" aria-labelledby="titleBack16" aria-describedby="descBack16" style="background-image: url('img/IMG_20250819_160128_993.jpg'); box-shadow: inset 0 0 40px rgba(90, 60, 40, 0.7);">
-      <div class="title" id="titleBack16">
-        • <span class="key-phrase">Get over something</span> — to recover from an unpleasant experience
-      </div>
-    </div>
-
-    <!-- Карточка 17 -->
-    <div class="flashcard-side front-17" aria-labelledby="titleFront17" aria-describedby="descFront17" style="background-image: url('img/IMG_20250819_160215_377.jpg'); box-shadow: inset 0 0 40px rgba(100, 70, 50, 0.5);">
-      <div class="title" id="titleFront17">
-        If you
-        <span 
-          class="interactive-blank" 
-          role="button" 
-          tabindex="0" 
-          aria-label="Интерактивный пробел, нажмите или нажмите Enter, чтобы увидеть ответ"
-          data-card="17"
-          id="blankArea17">&nbsp;</span>
-        , you feel nervous or anxious.
-      </div>
-    </div>
-    <div class="flashcard-side back-17" aria-labelledby="titleBack17" aria-describedby="descBack17" style="background-image: url('img/IMG_20250819_160215_377.jpg'); box-shadow: inset 0 0 40px rgba(100, 70, 50, 0.7);">
-      <div class="title" id="titleBack17">
-        • <span class="key-phrase">Have butterflies in one’s stomach</span> — to feel nervous, especially before an important event
-      </div>
-    </div>
-
-    <!-- Карточка 18 -->
-    <div class="flashcard-side front-18" aria-labelledby="titleFront18" aria-describedby="descFront18" style="background-image: url('img/IMG_20250819_170059_467.jpg'); box-shadow: inset 0 0 40px rgba(110, 80, 60, 0.5);">
-      <div class="title" id="titleFront18">
-        If you say that someone
-        <span 
-          class="interactive-blank" 
-          role="button" 
-          tabindex="0" 
-          aria-label="Интерактивный пробел, нажмите или нажмите Enter, чтобы увидеть ответ"
-          data-card="18"
-          id="blankArea18">&nbsp;</span>
-        , you mean that they suddenly become too frightened or nervous to do something they had planned to do, especially something important.
-      </div>
-    </div>
-    <div class="flashcard-side back-18" aria-labelledby="titleBack18" aria-describedby="descBack18" style="background-image: url('img/IMG_20250819_170059_467.jpg'); box-shadow: inset 0 0 40px rgba(110, 80, 60, 0.7);">
-      <div class="title" id="titleBack18">
-        • <span class="key-phrase">Get cold feet</span> — to suddenly become nervous or frightened to do something planned, often just before an important event
-      </div>
-    </div>
-
-    <!-- Карточка 19 -->
-    <div class="flashcard-side front-19" aria-labelledby="titleFront19" aria-describedby="descFront19" style="background-image: url('img/IMG_20250819_155242_647.jpg'); box-shadow: inset 0 0 40px rgba(95, 60, 55, 0.5);">
-      <div class="title" id="titleFront19">
-        If you
-        <span 
-          class="interactive-blank" 
-          role="button" 
-          tabindex="0" 
-          aria-label="Интерактивный пробел, нажмите или нажмите Enter, чтобы увидеть ответ"
-          data-card="19"
-          id="blankArea19">&nbsp;</span>
-        , you come to a quick decision without enough evidence.
-      </div>
-    </div>
-    <div class="flashcard-side back-19" aria-labelledby="titleBack19" aria-describedby="descBack19" style="background-image: url('img/IMG_20250819_155242_647.jpg'); box-shadow: inset 0 0 40px rgba(95, 60, 55, 0.7);">
-      <div class="title" id="titleBack19">
-        • <span class="key-phrase">Jump to conclusions</span> — to make a judgment or decision hastily, without sufficient evidence or information
-      </div>
-    </div>
-
-    <!-- Карточка 20 -->
-    <div class="flashcard-side front-20" aria-labelledby="titleFront20" aria-describedby="descFront20" style="background-image: url('img/IMG_20250819_155913_210.jpg'); box-shadow: inset 0 0 40px rgba(85, 55, 45, 0.5);">
-      <div class="title" id="titleFront20">
-        If you are
-        <span 
-          class="interactive-blank" 
-          role="button" 
-          tabindex="0" 
-          aria-label="Интерактивный пробел, нажмите или нажмите Enter, чтобы увидеть ответ"
-          data-card="20"
-          id="blankArea20">&nbsp;</span>
-        , you feel confused, disorganized, and unable to focus, making it difficult to think clearly or complete tasks.
-      </div>
-    </div>
-    <div class="flashcard-side back-20" aria-labelledby="titleBack20" aria-describedby="descBack20" style="background-image: url('img/IMG_20250819_155913_210.jpg'); box-shadow: inset 0 0 40px rgba(85, 55, 45, 0.7);">
-      <div class="title" id="titleBack20">
-        • <span class="key-phrase">Be all over the place</span> — to feel confused, disorganized, or unable to focus, often experiencing many different emotions or thoughts at once.
-      </div>
-    </div>
-
-        <!-- Карточка 21 -->
-    <div class="flashcard-side front-21" aria-labelledby="titleFront21" aria-describedby="descFront21" style="background-image: url('img/IMG_20250819_163626_119.jpg'); box-shadow: inset 0 0 40px rgba(95, 65, 50, 0.5);">
-      <div class="title" id="titleFront21">
-        If you
-        <span 
-          class="interactive-blank" 
-          role="button" 
-          tabindex="0" 
-          aria-label="Интерактивный пробел, нажмите или нажмите Enter, чтобы увидеть ответ"
-          data-card="21"
-          id="blankArea21">&nbsp;</span>
-        , you are upset about something that has already happened and cannot be changed.
-      </div>
-    </div>
-    <div class="flashcard-side back-21" aria-labelledby="titleBack21" aria-describedby="descBack21" style="background-image: url('img/IMG_20250819_163626_119.jpg'); box-shadow: inset 0 0 40px rgba(95, 65, 50, 0.7);">
-      <div class="title" id="titleBack21">
-        • <span class="key-phrase">Cry over spilled milk</span> — to be upset about something that cannot be changed
-      </div>
-    </div>
-
-    <!-- Карточка 22 -->
-    <div class="flashcard-side front-22" aria-labelledby="titleFront22" aria-describedby="descFront22" style="background-image: url('img/IMG_20250819_161352_662.jpg'); box-shadow: inset 0 0 40px rgba(80, 70, 65, 0.5);">
-      <div class="title" id="titleFront22">
-        If you
-        <span 
-          class="interactive-blank" 
-          role="button" 
-          tabindex="0" 
-          aria-label="Интерактивный пробел, нажмите или нажмите Enter, чтобы увидеть ответ"
-          data-card="22"
-          id="blankArea22">&nbsp;</span>
-        , you stay optimistic even when things are tough.
-      </div>
-    </div>
-    <div class="flashcard-side back-22" aria-labelledby="titleBack22" aria-describedby="descBack22" style="background-image: url('img/IMG_20250819_161352_662.jpg'); box-shadow: inset 0 0 40px rgba(80, 70, 65, 0.7);">
-      <div class="title" id="titleBack22">
-        • <span class="key-phrase">Keep one’s chin up</span> — to remain cheerful, positive, and hopeful in a difficult or challenging situation
-      </div>
-    </div>
-
-    <!-- Карточка 23 -->
-    <div class="flashcard-side front-23" aria-labelledby="titleFront23" aria-describedby="descFront23" style="background-image: url('img/IMG_20250819_162748_639.jpg'); box-shadow: inset 0 0 40px rgba(70, 60, 60, 0.5);">
-      <div class="title" id="titleFront23">
-        If you say that you are
-        <span 
-          class="interactive-blank" 
-          role="button" 
-          tabindex="0" 
-          aria-label="Интерактивный пробел, нажмите или нажмите Enter, чтобы увидеть ответ"
-          data-card="23"
-          id="blankArea23">&nbsp;</span>
-        , you mean that you feel slightly ill or unwell.
-      </div>
-    </div>
-    <div class="flashcard-side back-23" aria-labelledby="titleBack23" aria-describedby="descBack23" style="background-image: url('img/IMG_20250819_162748_639.jpg'); box-shadow: inset 0 0 40px rgba(70, 60, 60, 0.7);">
-      <div class="title" id="titleBack23">
-        • <span class="key-phrase">Be under the weather</span> — to feel slightly ill
-      </div>
-    </div>
-
-    <!-- Карточка 24 -->
-    <div class="flashcard-side front-24" aria-labelledby="titleFront24" aria-describedby="descFront24" style="background-image: url('img/IMG_20250819_162440_831.jpg'); box-shadow: inset 0 0 40px rgba(90, 55, 45, 0.5);">
-      <div class="title" id="titleFront24">
-        If you say that you
-        <span 
-          class="interactive-blank" 
-          role="button" 
-          tabindex="0" 
-          aria-label="Интерактивный пробел, нажмите или нажмите Enter, чтобы увидеть ответ"
-          data-card="24"
-          id="blankArea24">&nbsp;</span>
-        , you mean that you pretend to be strong and cheerful, even when you are worried, upset, or in pain.
-      </div>
-    </div>
-    <div class="flashcard-side back-24" aria-labelledby="titleBack24" aria-describedby="descBack24" style="background-image: url('img/IMG_20250819_162440_831.jpg'); box-shadow: inset 0 0 40px rgba(90, 55, 45, 0.7);">
-      <div class="title" id="titleBack24">
-        • <span class="key-phrase">Put on a brave face</span> — to pretend to be happy or confident when someone is not actually feeling that way
-      </div>
-    </div>
-
-    <!-- Карточка 25 -->
-    <div class="flashcard-side front-25" aria-labelledby="titleFront25" aria-describedby="descFront25" style="background-image: url('img/IMG_20250819_163942_360.jpg'); box-shadow: inset 0 0 40px rgba(120, 55, 60, 0.5);">
-      <div class="title" id="titleFront25">
-        If someone
-        <span 
-          class="interactive-blank" 
-          role="button" 
-          tabindex="0" 
-          aria-label="Интерактивный пробел, нажмите или нажмите Enter, чтобы увидеть ответ"
-          data-card="25"
-          id="blankArea25">&nbsp;</span>
-        at you, they suddenly speak to you in an angry or annoyed way.
-      </div>
-    </div>
-    <div class="flashcard-side back-25" aria-labelledby="titleBack25" aria-describedby="descBack25" style="background-image: url('img/IMG_20250819_163942_360.jpg'); box-shadow: inset 0 0 40px rgba(120, 55, 60, 0.7);">
-      <div class="title" id="titleBack25">
-        • <span class="key-phrase">Snap</span> — to suddenly lose control emotionally and react angrily
-      </div>
-    </div>
-
-        <!-- Карточка 26 -->
-    <div class="flashcard-side front-26" aria-labelledby="titleFront26" aria-describedby="descFront26" style="background-image: url('img/IMG_20250819_155710_437.jpg'); box-shadow: inset 0 0 40px rgba(100, 65, 70, 0.5);">
-      <div class="title" id="titleFront26">
-        If you say that someone feels
-        <span 
-          class="interactive-blank" 
-          role="button" 
-          tabindex="0" 
-          aria-label="Интерактивный пробел, нажмите или нажмите Enter, чтобы увидеть ответ"
-          data-card="26"
-          id="blankArea26">&nbsp;</span>
-        , you mean that they are too stressed or unable to cope with everything they have to deal with.
-      </div>
-    </div>
-    <div class="flashcard-side back-26" aria-labelledby="titleBack26" aria-describedby="descBack26" style="background-image: url('img/IMG_20250819_155710_437.jpg'); box-shadow: inset 0 0 40px rgba(100, 65, 70, 0.7);">
-      <div class="title" id="titleBack26">
-        • <span class="key-phrase">Feel overwhelmed</span> — to feel stressed or unable to cope with a situation
-      </div>
-    </div>
-
-    <!-- Карточка 27 -->
-    <div class="flashcard-side front-27" aria-labelledby="titleFront27" aria-describedby="descFront27" style="background-image: url('img/IMG_20250819_162637_907.jpg'); box-shadow: inset 0 0 40px rgba(90, 50, 45, 0.5);">
-      <div class="title" id="titleFront27">
-        If you say that someone is
-        <span 
-          class="interactive-blank" 
-          role="button" 
-          tabindex="0" 
-          aria-label="Интерактивный пробел, нажмите или нажмите Enter, чтобы увидеть ответ"
-          data-card="27"
-          id="blankArea27">&nbsp;</span>
-        , you mean that they are deeply sad or distressed because of a significant loss.
-      </div>
-    </div>
-    <div class="flashcard-side back-27" aria-labelledby="titleBack27" aria-describedby="descBack27" style="background-image: url('img/IMG_20250819_162637_907.jpg'); box-shadow: inset 0 0 40px rgba(90, 50, 45, 0.7);">
-      <div class="title" id="titleBack27">
-        • <span class="key-phrase">Be heartbroken</span> — to feel extremely sad or deeply upset because of a great loss or disappointment
-      </div>
-    </div>
-
-    <!-- Карточка 28 -->
-    <div class="flashcard-side front-28" aria-labelledby="titleFront28" aria-describedby="descFront28" style="background-image: url('img/IMG_20250819_160015_306.jpg'); box-shadow: inset 0 0 40px rgba(115, 90, 70, 0.5);">
-      <div class="title" id="titleFront28">
-        If you
-        <span 
-          class="interactive-blank" 
-          role="button" 
-          tabindex="0" 
-          aria-label="Интерактивный пробел, нажмите или нажмите Enter, чтобы увидеть ответ"
-          data-card="28"
-          id="blankArea28">&nbsp;</span>
-        , you try to make a situation seem less serious or important by joking about it or not taking it seriously.
-      </div>
-    </div>
-    <div class="flashcard-side back-28" aria-labelledby="titleBack28" aria-describedby="descBack28" style="background-image: url('img/IMG_20250819_160015_306.jpg'); box-shadow: inset 0 0 40px rgba(115, 90, 70, 0.7);">
-      <div class="title" id="titleBack28">
-        • <span class="key-phrase">Laugh something off</span> — to treat a problem or bad situation as unimportant by joking about it
-      </div>
-    </div>
-
-    <!-- Карточка 29 -->
-    <div class="flashcard-side front-29" aria-labelledby="titleFront29" aria-describedby="descFront29" style="background-image: url('img/IMG_20250819_160659_557.jpg'); box-shadow: inset 0 0 40px rgba(85, 60, 45, 0.5);">
-      <div class="title" id="titleFront29">
-        If someone has
-        <span 
-          class="interactive-blank" 
-          role="button" 
-          tabindex="0" 
-          aria-label="Интерактивный пробел, нажмите или нажмите Enter, чтобы увидеть ответ"
-          data-card="29"
-          id="blankArea29">&nbsp;</span>
-        , they change their opinion or feelings about something.
-      </div>
-    </div>
-    <div class="flashcard-side back-29" aria-labelledby="titleBack29" aria-describedby="descBack29" style="background-image: url('img/IMG_20250819_160659_557.jpg'); box-shadow: inset 0 0 40px rgba(85, 60, 45, 0.7);">
-      <div class="title" id="titleBack29">
-        • <span class="key-phrase">Have a change of heart</span> — to change one’s opinion or feelings about something
-      </div>
-    </div>
-
-        <!-- Карточка 30 -->
-    <div class="flashcard-side front-30" aria-labelledby="titleFront30" aria-describedby="descFront30" style="background-image: url('img/IMG_20250819_163153_916.jpg'); box-shadow: inset 0 0 40px rgba(90, 55, 45, 0.5);">
-      <div class="title" id="titleFront30">
-        If you are
-        <span 
-          class="interactive-blank" 
-          role="button" 
-          tabindex="0" 
-          aria-label="Интерактивный пробел, нажмите или нажмите Enter, чтобы увидеть ответ"
-          data-card="30"
-          id="blankArea30">&nbsp;</span>
-        with something, you are very tired or angry about it because it has lasted for a long time.
-      </div>
-    </div>
-    <div class="flashcard-side back-30" aria-labelledby="titleBack30" aria-describedby="descBack30" style="background-image: url('img/IMG_20250819_163153_916.jpg'); box-shadow: inset 0 0 40px rgba(90, 55, 45, 0.7);">
-      <div class="title" id="titleBack30">
-        • <span class="key-phrase">Be fed up</span> — to feel annoyed, bored, or tired of something, especially after experiencing it for a long time
-      </div>
-    </div>
-
-    <!-- Карточка 31 -->
-    <div class="flashcard-side front-31" aria-labelledby="titleFront31" aria-describedby="descFront31" style="background-image: url('img/IMG_20250819_163448_150.jpg'); box-shadow: inset 0 0 40px rgba(85, 60, 50, 0.5);">
-      <div class="title" id="titleFront31">
-        Someone who is
-        <span 
-          class="interactive-blank" 
-          role="button" 
-          tabindex="0" 
-          aria-label="Интерактивный пробел, нажмите или нажмите Enter, чтобы увидеть ответ"
-          data-card="31"
-          id="blankArea31">&nbsp;</span>
-        is very tired or exhausted, especially due to hard work or physical exertion.
-      </div>
-    </div>
-    <div class="flashcard-side back-31" aria-labelledby="titleBack31" aria-describedby="descBack31" style="background-image: url('img/IMG_20250819_163448_150.jpg'); box-shadow: inset 0 0 40px rgba(85, 60, 50, 0.7);">
-      <div class="title" id="titleBack31">
-        • <span class="key-phrase">Be worn out</span> — to be very tired or exhausted, especially from hard work or prolonged stress
-      </div>
-    </div>
-
-    <!-- Карточка 32 -->
-    <div class="flashcard-side front-32" aria-labelledby="titleFront32" aria-describedby="descFront32" style="background-image: url('img/IMG_20250819_163808_743.jpg'); box-shadow: inset 0 0 40px rgba(95, 65, 55, 0.5);">
-      <div class="title" id="titleFront32">
-        If you
-        <span 
-          class="interactive-blank" 
-          role="button" 
-          tabindex="0" 
-          aria-label="Интерактивный пробел, нажмите или нажмите Enter, чтобы увидеть ответ"
-          data-card="32"
-          id="blankArea32">&nbsp;</span>
-        , you get angry or upset unexpectedly.
-      </div>
-    </div>
-    <div class="flashcard-side back-32" aria-labelledby="titleBack32" aria-describedby="descBack32" style="background-image: url('img/IMG_20250819_163808_743.jpg'); box-shadow: inset 0 0 40px rgba(95, 65, 55, 0.7);">
-      <div class="title" id="titleBack32">
-        • <span class="key-phrase">Lose one’s cool</span> — to suddenly become very angry, often losing control of your temper
-      </div>
-    </div>
-
-    <!-- Карточка 33 -->
-    <div class="flashcard-side front-33" aria-labelledby="titleFront33" aria-describedby="descFront33" style="background-image: url('img/IMG_20250819_163217_642.jpg'); box-shadow: inset 0 0 40px rgba(110, 70, 65, 0.5);">
-      <div class="title" id="titleFront33">
-        If you say that you are down in the dumps, you mean that you feel very sad, depressed, or discouraged.
-      </div>
-    </div>
-    <div class="flashcard-side back-33" aria-labelledby="titleBack33" aria-describedby="descBack33" style="background-image: url('img/IMG_20250819_163217_642.jpg'); box-shadow: inset 0 0 40px rgba(110, 70, 65, 0.7);">
-      <div class="title" id="titleBack33">
-        • <span class="key-phrase">Be down in the dumps</span> — to feel very sad, depressed, or unhappy
-      </div>
-    </div>
-
-    <!-- Карточка 34 -->
-    <div class="flashcard-side front-34" aria-labelledby="titleFront34" aria-describedby="descFront34" style="background-image: url('img/IMG_20250819_164414_244.jpg'); box-shadow: inset 0 0 40px rgba(85, 50, 45, 0.5);">
-      <div class="title" id="titleFront34">
-        If you say that someone has a
-        <span 
-          class="interactive-blank" 
-          role="button" 
-          tabindex="0" 
-          aria-label="Интерактивный пробел, нажмите или нажмите Enter, чтобы увидеть ответ"
-          data-card="34"
-          id="blankArea34">&nbsp;</span>
-        , you think that they get upset or angry easily because they believe someone has treated them unfairly.
-      </div>
-    </div>
-    <div class="flashcard-side back-34" aria-labelledby="titleBack34" aria-describedby="descBack34" style="background-image: url('img/IMG_20250819_164414_244.jpg'); box-shadow: inset 0 0 40px rgba(85, 50, 45, 0.7);">
-      <div class="title" id="titleBack34">
-        • <span class="key-phrase">Have a chip on one's shoulder</span> — To have an angry or unpleasant attitude, often because one feels they have been treated unfairly
-      </div>
-    </div>
-
-    <!-- Карточка 35 -->
-    <div class="flashcard-side front-35" aria-labelledby="titleFront35" aria-describedby="descFront35" style="background-image: url('img/IMG_20250819_163856_822.jpg'); box-shadow: inset 0 0 40px rgba(120, 70, 50, 0.5);">
-      <div class="title" id="titleFront35">
-        If you feel
-        <span 
-          class="interactive-blank" 
-          role="button" 
-          tabindex="0" 
-          aria-label="Интерактивный пробел, нажмите или нажмите Enter, чтобы увидеть ответ"
-          data-card="35"
-          id="blankArea35">&nbsp;</span>
-        , you are highlighting that you feel extremely happy, joyful, or successful.
-      </div>
-    </div>
-    <div class="flashcard-side back-35" aria-labelledby="titleBack35" aria-describedby="descBack35" style="background-image: url('img/IMG_20250819_163856_822.jpg'); box-shadow: inset 0 0 40px rgba(120, 70, 50, 0.7);">
-      <div class="title" id="titleBack35">
-        • <span class="key-phrase">Feel on top of the world</span> — to feel extremely happy
-      </div>
-    </div>
-
-        <!-- Карточка 36 -->
-    <div class="flashcard-side front-36" aria-labelledby="titleFront36" aria-describedby="descFront36" style="background-image: url('img/IMG_20250819_163350_468.jpg'); box-shadow: inset 0 0 40px rgba(120, 75, 85, 0.5);">
-      <div class="title" id="titleFront36">
-        If you say that you are
-        <span 
-          class="interactive-blank" 
-          role="button" 
-          tabindex="0" 
-          aria-label="Интерактивный пробел, нажмите или нажмите Enter, чтобы увидеть ответ"
-          data-card="36"
-          id="blankArea36">&nbsp;</span>
-        , you mean that you feel extremely happy and excited, usually because something very good or special has happened to you.
-      </div>
-    </div>
-    <div class="flashcard-side back-36" aria-labelledby="titleBack36" aria-describedby="descBack36" style="background-image: url('img/IMG_20250819_163350_468.jpg'); box-shadow: inset 0 0 40px rgba(120, 75, 85, 0.7);">
-      <div class="title" id="titleBack36">
-        • <span class="key-phrase">Walk on air</span> — To feel extremely happy and excited, often because something very good has happened to you
-      </div>
-    </div>
-
-    <!-- Карточка 37 -->
-    <div class="flashcard-side front-37" aria-labelledby="titleFront37" aria-describedby="descFront37" style="background-image: url('img/IMG_20250819_163018_775.jpg'); box-shadow: inset 0 0 40px rgba(130, 80, 60, 0.5);">
-      <div class="title" id="titleFront37">
-        If you are
-        <span 
-          class="interactive-blank" 
-          role="button" 
-          tabindex="0" 
-          aria-label="Интерактивный пробел, нажмите или нажмите Enter, чтобы увидеть ответ"
-          data-card="37"
-          id="blankArea37">&nbsp;</span>
-        , you feel very joyful or ecstatic.
-      </div>
-    </div>
-    <div class="flashcard-side back-37" aria-labelledby="titleBack37" aria-describedby="descBack37" style="background-image: url('img/IMG_20250819_163018_775.jpg'); box-shadow: inset 0 0 40px rgba(130, 80, 60, 0.7);">
-      <div class="title" id="titleBack37">
-        • <span class="key-phrase">Be on cloud nine</span> — to feel extremely happy
-      </div>
-    </div>
-
-    <!-- Карточка 38 -->
-    <div class="flashcard-side front-38" aria-labelledby="titleFront38" aria-describedby="descFront38" style="background-image: url('img/IMG_20250819_165120_262.jpg'); box-shadow: inset 0 0 40px rgba(125, 90, 65, 0.5);">
-      <div class="title" id="titleFront38">
-        If you are
-        <span 
-          class="interactive-blank" 
-          role="button" 
-          tabindex="0" 
-          aria-label="Интерактивный пробел, нажмите или нажмите Enter, чтобы увидеть ответ"
-          data-card="38"
-          id="blankArea38">&nbsp;</span>
-        , you are happy, cheerful, and full of energy.
-      </div>
-    </div>
-    <div class="flashcard-side back-38" aria-labelledby="titleBack38" aria-describedby="descBack38" style="background-image: url('img/IMG_20250819_165120_262.jpg'); box-shadow: inset 0 0 40px rgba(125, 90, 65, 0.7);">
-      <div class="title" id="titleBack38">
-        • <span class="key-phrase">Be in high spirits</span> — to be very happy, cheerful, and full of energy
-      </div>
-    </div>
-
-      </div> <!-- Закрытие .flashcard-container -->
+    <div class="nav-buttons">
+      <button id="backBtn" aria-label="Previous card">Back</button>
+      <button id="nextBtn" aria-label="Next card">Next</button>
+    </div>
+  </div>
 
 <script>
-  // Объекты с интерактивными пробелами и ответами
-  const blanks = {
-    1: document.getElementById('blankArea1'),
-    2: document.getElementById('blankArea2'),
-    3: document.getElementById('blankArea3'),
-    4: document.getElementById('blankArea4'),
-    5: document.getElementById('blankArea5'),
-    6: document.getElementById('blankArea6'),
-    7: document.getElementById('blankArea7'),
-    8: document.getElementById('blankArea8'),
-    9: document.getElementById('blankArea9'),
-    10: document.getElementById('blankArea10'),
-    11: document.getElementById('blankArea11'),
-    12: document.getElementById('blankArea12'),
-    13: document.getElementById('blankArea13'),
-    14: document.getElementById('blankArea14'),
-    15: document.getElementById('blankArea15'),
-    16: document.getElementById('blankArea16'),
-    17: document.getElementById('blankArea17'),
-    18: document.getElementById('blankArea18'),
-    19: document.getElementById('blankArea19'),
-    20: document.getElementById('blankArea20'),
-    21: document.getElementById('blankArea21'),
-    22: document.getElementById('blankArea22'),
-    23: document.getElementById('blankArea23'),
-    24: document.getElementById('blankArea24'),
-    25: document.getElementById('blankArea25'),
-    26: document.getElementById('blankArea26'),
-    27: document.getElementById('blankArea27'),
-    28: document.getElementById('blankArea28'),
-    29: document.getElementById('blankArea29'),
-    30: document.getElementById('blankArea30'),
-    31: document.getElementById('blankArea31'),
-    32: document.getElementById('blankArea32'),
-    33: document.getElementById('blankArea33'),
-    34: document.getElementById('blankArea34'),
-    35: document.getElementById('blankArea35'),
-    36: document.getElementById('blankArea36'),
-    37: document.getElementById('blankArea37'),
-    38: document.getElementById('blankArea38'),
-  };
+  const cards = [
+    { bg: 'img/IMG_20250819_153902_853.jpg', front: 'If you have______ about something, you are uncertain because you have both positive and negative emotions.', keyphrase: 'mixed feelings', back: '• Mixed feelings — contradictory or conflicting emotions' },
+    { bg: 'img/IMG_20250819_154021_177.jpg', front: 'If you are________ , you do not know what to do or say because you are confused or worried.', keyphrase: 'at a loss', back: '• Be at a loss — to feel confused or uncertain about what to do' },
+    { bg: 'img/IMG_20250819_161039_279.jpg', front: '________ means to feel nervous, tense, or easily upset.', keyphrase: 'To be on edge', back: '• Be on edge — to feel nervous or anxious' },
+    { bg: 'img/IMG_20250819_154217_837.jpg', front: 'If you are_______ about something, you are unable to decide what to do.', keyphrase: 'in two minds', back: '• Be in two minds — to be uncertain or undecided' },
+    { bg: 'img/IMG_20250819_154300_255.jpg', front: 'If you_______, you manage to stay calm and control your emotions in a difficult or stressful situation.', keyphrase: 'keep it together', back: '• Keep it together — to stay calm and in control of one\'s emotions' },
+    { bg: 'img/IMG_20250819_154355_168.jpg', front: 'If you_______, you are thinking a lot about your problems or worries.', keyphrase: 'have a lot on your mind', back: '• Have a lot on one’s mind — to be occupied with many thoughts, problems, or worries.' },
+    { bg: 'img/IMG_20250819_154457_623.jpg', front: 'If you_______, you keep your feelings or emotions hidden instead of expressing them.', keyphrase: 'bottle something up', back: '• Bottle something up — to keep one’s emotions or feelings inside without expressing them' },
+    { bg: 'img/IMG_20250819_154642_439.jpg', front: 'If you are______, you feel slightly unwell, tired, or not as happy as usual.', keyphrase: 'out of sorts', back: '• Be out of sorts — to feel slightly unwell or not in good spirits' },
+    { bg: 'img/IMG_20250819_154959_504.jpg', front: 'If you_______, you deal with a difficult or unpleasant situation calmly and without letting it upset you.', keyphrase: 'take something in stride', back: '• Take something in stride — to deal with difficulties calmly and without stress' },
+    { bg: 'img/IMG_20250819_155025_976.jpg', front: 'If you______, you become confident and comfortable in a new situation or environment, especially after a period of adjustment.', keyphrase: 'find your feet', back: '• Find one’s feet — to become confident or comfortable in a new situation' },
+    { bg: 'img/IMG_20250819_155924_217.jpg', front: 'If you______ steam, you express your feelings to reduce stress or anger.', keyphrase: 'blow off', back: '• Blow off steam — to release strong emotions or frustration' },
+    { bg: 'img/IMG_20250819_155751_957.jpg', front: 'If you________, you try to find the positive or hopeful aspect of a situation that may seem bad or difficult.', keyphrase: 'look on the bright side', back: '• Look on the bright side — to focus on the positive aspects of a situation' },
+    { bg: 'img/IMG_20250819_155835_804.jpg', front: 'If you_______, you share your worries or problems with someone to feel better.', keyphrase: 'get something off your chest', back: '• Get something off one’s chest — to talk about something that has been bothering someone' },
+    { bg: 'img/IMG_20250819_155124_054.jpg', front: 'If you say that someone______, you mean that they feel down or unhappy.', keyphrase: 'feels blue', back: '• Feel blue — to feel sad or depressed' },
+    { bg: 'img/IMG_20250819_163734_377.jpg', front: 'If you______, you suddenly become very angry and lose control of your emotions.', keyphrase: 'lose your temper', back: '• Lose one’s temper — to suddenly become angry' },
+    { bg: 'img/IMG_20250819_160128_993.jpg', front: 'If you_____, you stop being upset about it and move on.', keyphrase: 'get over something', back: '• Get over something — to recover from an unpleasant experience' },
+    { bg: 'img/IMG_20250819_160215_377.jpg', front: 'If you______, you feel nervous or anxious.', keyphrase: 'have butterflies in your stomach', back: '• Have butterflies in one’s stomach — to feel nervous, especially before an important event' },
+    { bg: 'img/IMG_20250819_170059_467.jpg', front: 'If you say that someone________, you mean that they suddenly become too frightened or nervous to do something they had planned to do, especially something important.', keyphrase: 'gets cold feet', back: '• Get cold feet — to suddenly become nervous or frightened to do something planned, often just before an important event' },
+    { bg: 'img/IMG_20250819_155242_647.jpg', front: 'If you_______, you come to a quick decision without enough evidence.', keyphrase: 'jump to conclusions', back: '• Jump to conclusions — to make a judgment or decision hastily, without sufficient evidence or information' },
+    { bg: 'img/IMG_20250819_155913_210.jpg', front: 'If you are_________, you feel confused, disorganized, and unable to focus, making it difficult to think clearly or complete tasks.', keyphrase: 'all over the place', back: '• Be all over the place — to feel confused, disorganized, or unable to focus, often experiencing many different emotions or thoughts at once.' },
+    { bg: 'img/IMG_20250819_163626_119.jpg', front: 'If you______, you are upset about something that has already happened and cannot be changed.', keyphrase: 'cry over spilled milk', back: '• Cry over spilled milk — to be upset about something that cannot be changed' },
+    { bg: 'img/IMG_20250819_161352_662.jpg', front: 'If you______, you stay optimistic even when things are tough.', keyphrase: 'keep your chin up', back: '• Keep one’s chin up — to remain cheerful, positive, and hopeful in a difficult or challenging situation' },
+    { bg: 'img/IMG_20250819_162748_639.jpg', front: 'If you say that you are______, you mean that you feel slightly ill or unwell.', keyphrase: 'under the weather', back: '• Be under the weather — to feel slightly ill' },
+    { bg: 'img/IMG_20250819_162440_831.jpg', front: 'If you say that you_______, you mean that you pretend to be strong and cheerful, even when you are worried, upset, or in pain.', keyphrase: 'put on a brave face', back: '• Put on a brave face — to pretend to be happy or confident when someone is not actually feeling that way' },
+    { bg: 'img/IMG_20250819_163942_360.jpg', front: 'If someone______ at you, they suddenly speak to you in an angry or annoyed way.', keyphrase: 'snaps', back: '• Snap — to suddenly lose control emotionally and react angrily' },
+    { bg: 'img/IMG_20250819_155710_437.jpg', front: 'If you say that someone feels________, you mean that they are too stressed or unable to cope with everything they have to deal with.', keyphrase: 'overwhelmed', back: '• Feel overwhelmed — to feel stressed or unable to cope with a situation' },
+    { bg: 'img/IMG_20250819_162637_907.jpg', front: 'If you say that someone is_______, you mean that they are deeply sad or distressed because of a significant loss.', keyphrase: 'heartbroken', back: '• Be heartbroken — to feel extremely sad or deeply upset because of a great loss or disappointment' },
+    { bg: 'img/IMG_20250819_160015_306.jpg', front: 'If you________, you try to make a situation seem less serious or important by joking about it or not taking it seriously.', keyphrase: 'laugh something off', back: '• Laugh something off — to treat a problem or bad situation as unimportant by joking about it' },
+    { bg: 'img/IMG_20250819_160659_557.jpg', front: 'If someone has______, they change their opinion or feelings about something.', keyphrase: 'a change of heart', back: '• Have a change of heart — to change one’s opinion or feelings about something' },
+    { bg: 'img/IMG_20250819_163153_916.jpg', front: 'If you are______ with something, you are very tired or angry about it because it has lasted for a long time.', keyphrase: 'fed up', back: '• Be fed up — to feel annoyed, bored, or tired of something, especially after experiencing it for a long time' },
+    { bg: 'img/IMG_20250819_163448_150.jpg', front: 'Someone who is_______ is very tired or exhausted, especially due to hard work or physical exertion.', keyphrase: 'worn out', back: '• Be worn out — to be very tired or exhausted, especially from hard work or prolonged stress' },
+    { bg: 'img/IMG_20250819_163808_743.jpg', front: 'If you______, you get angry or upset unexpectedly.', keyphrase: 'lose your cool', back: '• Lose one’s cool — to suddenly become very angry, often losing control of your temper' },
+    { bg: 'img/IMG_20250819_163217_642.jpg', front: 'If you say that you are down in the dumps, you mean that you feel very sad, depressed, or discouraged.', keyphrase: '', back: '• Be down in the dumps — to feel very sad, depressed, or unhappy' },
+    { bg: 'img/IMG_20250819_164414_244.jpg', front: 'If you say that someone has a______, you think that they get upset or angry easily because they believe someone has treated them unfairly.', keyphrase: 'chip on their shoulder', back: '• Have a chip on one\'s shoulder — To have an angry or unpleasant attitude, often because one feels they have been treated unfairly' },
+    { bg: 'img/IMG_20250819_163856_822.jpg', front: 'If you feel______, you are highlighting that you feel extremely happy, joyful, or successful.', keyphrase: 'on top of the world', back: '• Feel on top of the world — to feel extremely happy' },
+    { bg: 'img/IMG_20250819_163350_468.jpg', front: 'If you say that you are______, you mean that you feel extremely happy and excited, usually because something very good or special has happened to you.', keyphrase: 'walking on air', back: '• Walk on air — To feel extremely happy and excited, often because something very good has happened to you' },
+    { bg: 'img/IMG_20250819_163018_775.jpg', front: 'If you are______, you feel very joyful or ecstatic.', keyphrase: 'on cloud nine', back: '• Be on cloud nine — to feel extremely happy' },
+    { bg: 'img/IMG_20250819_165120_262.jpg', front: 'If you are______, you are happy, cheerful, and full of energy', keyphrase: 'in high spirits', back: '• Be in high spirits — to be very happy, cheerful, and full of energy' }
+  ];
 
-  const answers = {
-    1: '<span class="key-phrase">mixed feelings</span>',
-    2: 'at a loss',
-    3: 'Be on edge',
-    4: 'in two minds',
-    5: 'Keep it together',
-    6: 'Have a lot on your mind',
-    7: 'bottle something up',
-    8: 'out of sorts',
-    9: 'take something in stride',
-    10: 'find your feet',
-    11: 'Blow off steam',
-    12: 'look on the bright side',
-    13: 'get something off your chest',
-    14: 'feels blue',
-    15: 'lose your temper',
-    16: 'get over something',
-    17: 'have butterflies in your stomach',
-    18: 'gets cold feet',
-    19: 'jump to conclusions',
-    20: 'all over the place',
-    21: 'cry over spilled milk',
-    22: 'keep your chin up',
-    23: 'under the weather',
-    24: 'put on a brave face',
-    25: 'snaps',
-    26: 'overwhelmed',
-    27: 'heartbroken',
-    28: 'laugh something off',
-    29: 'a change of heart',
-    30: 'fed up',
-    31: 'worn out',
-    32: 'lose your cool',
-    33: 'down in the dumps',
-    34: 'chip on their shoulder',
-    35: 'on top of the world',
-    36: 'walking on air',
-    37: 'on cloud nine',
-    38: 'in high spirits',
-  };
+  let currentIndex = 0;
 
-  function revealPhrase(cardNum) {
-    const blank = blanks[cardNum];
-    if (blank && !blank.classList.contains('revealed')) {
-      blank.classList.add('revealed');
-      blank.innerHTML = answers[cardNum];
-      blank.style.cursor = 'default';
-      blank.setAttribute('aria-label', answers[cardNum].replace(/<[^>]+>/g, ''));
-      blank.style.padding = '0';
-      blank.style.whiteSpace = 'normal';
-      blank.removeEventListener('click', blank._clickHandler);
-      blank.removeEventListener('keydown', blank._keyHandler);
-    }
-  }
+  const flashcard = document.getElementById('flashcard');
+  const frontText = document.getElementById('front-text');
+  const keyphrasePopup = document.getElementById('keyphrase-popup');
+  const backText = document.getElementById('back-text');
+  const backBtn = document.getElementById('backBtn');
+  const nextBtn = document.getElementById('nextBtn');
 
-  function setupBlank(blank, cardNum) {
-    blank.classList.remove('revealed');
-    blank.innerHTML = '\u00A0';
-    blank.style.cursor = 'pointer';
-    blank.style.padding = '2px 10px';
-    blank.style.whiteSpace = 'nowrap';
-    blank.setAttribute('aria-label', 'Интерактивный пробел, нажмите или нажмите Enter, чтобы увидеть ответ');
+  function setCard(index) {
+    const card = cards[index];
+    flashcard.style.backgroundImage = `url('${card.bg}')`;
 
-    const clickHandler = () => revealPhrase(cardNum);
-</div> <!-- Закрытие .flashcards-wrapper -->
-</div> <!-- Закрытие .flashcard-container -->
+    // Заменяем пробелы с подчеркиваниями на пульсирующий span
+    const pulseSpanHTML = '<span class="pulse-blank" tabindex="0" aria-label="Нажмите, чтобы показать ключевую фразу"></span>';
+    let frontHTML = card.front.replace(/_{2,}/g, pulseSpanHTML);
+    frontText.innerHTML = frontHTML;
 
-<script>
-  const blanks = {
-    1: document.getElementById('blankArea1'),
-    2: document.getElementById('blankArea2'),
-    3: document.getElementById('blankArea3'),
-    4: document.getElementById('blankArea4'),
-    5: document.getElementById('blankArea5'),
-    6: document.getElementById('blankArea6'),
-    7: document.getElementById('blankArea7'),
-    8: document.getElementById('blankArea8'),
-    9: document.getElementById('blankArea9'),
-    10: document.getElementById('blankArea10'),
-    11: document.getElementById('blankArea11'),
-    12: document.getElementById('blankArea12'),
-    13: document.getElementById('blankArea13'),
-    14: document.getElementById('blankArea14'),
-    15: document.getElementById('blankArea15'),
-    16: document.getElementById('blankArea16'),
-    17: document.getElementById('blankArea17'),
-    18: document.getElementById('blankArea18'),
-    19: document.getElementById('blankArea19'),
-    20: document.getElementById('blankArea20'),
-    21: document.getElementById('blankArea21'),
-    22: document.getElementById('blankArea22'),
-    23: document.getElementById('blankArea23'),
-    24: document.getElementById('blankArea24'),
-    25: document.getElementById('blankArea25'),
-    26: document.getElementById('blankArea26'),
-    27: document.getElementById('blankArea27'),
-    28: document.getElementById('blankArea28'),
-    29: document.getElementById('blankArea29'),
-    30: document.getElementById('blankArea30'),
-    31: document.getElementById('blankArea31'),
-    32: document.getElementById('blankArea32'),
-    33: document.getElementById('blankArea33'),
-    34: document.getElementById('blankArea34'),
-    35: document.getElementById('blankArea35'),
-    36: document.getElementById('blankArea36'),
-    37: document.getElementById('blankArea37'),
-    38: document.getElementById('blankArea38'),
-  };
+    keyphrasePopup.style.display = 'none';
+    backText.style.display = 'none';
+    backText.textContent = '';
 
-  const answers = {
-    1: '<span class="key-phrase">mixed feelings</span>',
-    2: 'at a loss',
-    3: 'Be on edge',
-    4: 'in two minds',
-    5: 'Keep it together',
-    6: 'Have a lot on your mind',
-    7: 'bottle something up',
-    8: 'out of sorts',
-    9: 'take something in stride',
-    10: 'find your feet',
-    11: 'Blow off steam',
-    12: 'look on the bright side',
-    13: 'get something off your chest',
-    14: 'feels blue',
-    15: 'lose your temper',
-    16: 'get over something',
-    17: 'have butterflies in your stomach',
-    18: 'gets cold feet',
-    19: 'jump to conclusions',
-    20: 'all over the place',
-    21: 'cry over spilled milk',
-    22: 'keep your chin up',
-    23: 'under the weather',
-    24: 'put on a brave face',
-    25: 'snaps',
-    26: 'overwhelmed',
-    27: 'heartbroken',
-    28: 'laugh something off',
-    29: 'a change of heart',
-    30: 'fed up',
-    31: 'worn out',
-    32: 'lose your cool',
-    33: 'down in the dumps',
-    34: 'chip on their shoulder',
-    35: 'on top of the world',
-    36: 'walking on air',
-    37: 'on cloud nine',
-    38: 'in high spirits',
-  };
+    backBtn.disabled = index === 0;
+    nextBtn.disabled = index === cards.length - 1;
 
-  function revealPhrase(cardNum) {
-    const blank = blanks[cardNum];
-    if (blank && !blank.classList.contains('revealed')) {
-      blank.classList.add('revealed');
-      blank.innerHTML = answers[cardNum];
-      blank.style.cursor = 'default';
-      blank.setAttribute('aria-label', answers[cardNum].replace(/<[^>]+>/g, ''));
-      blank.style.padding = '0';
-      blank.style.whiteSpace = 'normal';
-      blank.removeEventListener('click', blank._clickHandler);
-      blank.removeEventListener('keydown', blank._keyHandler);
-    }
-  }
+    // Навешиваем обработчики на пробел
+    const blank = frontText.querySelector('.pulse-blank');
+    if (blank) {
+      blank.style.animation = 'pulseOrange 2s infinite';
+      blank.style.color = 'transparent';
 
-  function setupBlank(blank, cardNum) {
-    blank.classList.remove('revealed');
-    blank.innerHTML = '\u00A0';
-    blank.style.cursor = 'pointer';
-    blank.style.padding = '2px 10px';
-    blank.style.whiteSpace = 'nowrap';
-    blank.setAttribute('aria-label', 'Интерактивный пробел, нажмите или нажмите Enter, чтобы увидеть ответ');
+      function showKeyphrase() {
+        keyphrasePopup.textContent = card.keyphrase || '(Отсутствует)';
+        keyphrasePopup.style.display = 'block';
 
-    const clickHandler = () => revealPhrase(cardNum);
-    const keyHandler = e => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        revealPhrase(cardNum);
+        backText.textContent = card.back;
+        backText.style.display = 'block';
+
+        blank.style.animation = 'none';
+        blank.style.color = 'orange';
       }
-    };
-    blank._clickHandler = clickHandler;
-    blank._keyHandler = keyHandler;
-}
 
-  for (const cardNum in blanks) {
-    if (blanks[cardNum]) {
-      setupBlank(blanks[cardNum], parseInt(cardNum));
+      // Удаляем старые обработчики, чтобы не было дубликатов
+      blank.replaceWith(blank.cloneNode(true));
+      const newBlank = frontText.querySelector('.pulse-blank');
+      newBlank.style.animation = 'pulseOrange 2s infinite';
+      newBlank.style.color = 'transparent';
+
+      newBlank.addEventListener('click', showKeyphrase);
+      newBlank.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          showKeyphrase();
+        }
+      });
     }
   }
-</script>
 
+  backBtn.addEventListener('click', () => {
+    if(currentIndex > 0){
+      currentIndex--;
+      setCard(currentIndex);
+    }
+  });
+
+  nextBtn.addEventListener('click', () => {
+    if(currentIndex < cards.length - 1){
+      currentIndex++;
+      setCard(currentIndex);
+    }
+  });
+
+  setCard(currentIndex);
+</script>
 </body>
 </html>
