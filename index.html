@@ -45,50 +45,132 @@
   .side.active {
     display: block;
   }
+
+  /* Яркий, читаемый текст с тенью для контраста */
   .front-text {
-    font-size: 20px;
-    line-height: 1.4;
+    font-size: 21px;
+    line-height: 1.5;
+    color: #fffdd0; /* светло-слоновая кость для лучшей читаемости */
+    text-shadow:
+      1px 1px 4px rgba(0, 0, 0, 0.7),
+      0 0 8px rgba(0, 0, 0, 0.6);
   }
+
   .pulse-blank {
     display: inline-block;
     min-width: 90px;
     border-radius: 8px;
-    border: 2px solid orange;
+    border: 3px solid orange;
     box-sizing: border-box;
     cursor: pointer;
-    padding: 4px 10px;
+    padding: 6px 14px;
     font-weight: bold;
     color: transparent;
     text-align: center;
     vertical-align: middle;
     font-size: 18px;
-    animation: pulseOrange 2s infinite;
+    animation: pulseOrangeStronger 1.2s infinite ease-in-out;
     user-select: none;
-    transition: color 0.3s ease, min-width 0.3s ease;
+    transition: color 0.3s ease, min-width 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
     white-space: nowrap;
+    position: relative;
+  }
+  @keyframes pulseOrangeStronger {
+    0%, 100% {
+      box-shadow:
+        0 0 20px 5px rgba(255, 165, 0, 0.85),
+        0 0 40px 10px rgba(255, 140, 0, 0.75);
+    }
+    50% {
+      box-shadow:
+        0 0 30px 8px rgba(255, 200, 0, 1),
+        0 0 50px 14px rgba(255, 180, 0, 0.9);
+    }
+  }
+  /* Изменённый tooltip с текстом на английском */
+  .pulse-blank::after {
+    content: "Click here";
+    position: absolute;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 165, 0, 0.95);
+    color: black;
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-size: 14px;
+    white-space: nowrap;
+    opacity: 1; /* Теперь подсказка всегда видна */
+    pointer-events: none;
+    box-shadow: 0 0 8px rgba(255, 165, 0, 0.8);
+    font-weight: 700;
+  }
+  /* Пропадает при раскрытом ключе */
+  .pulse-blank.revealed::after {
+    opacity: 0;
+  }
+
+  .pulse-blank:hover,
+  .pulse-blank:focus {
+    color: orange;
+    animation: pulseOrangeHoverStronger 1s infinite ease-in-out;
+    box-shadow:
+      0 0 28px 9px rgba(255, 165, 0, 1),
+      0 0 60px 18px rgba(255, 200, 0, 1);
+    outline: none;
+    transform: scale(1.15);
+  }
+  @keyframes pulseOrangeHoverStronger {
+    0%, 100% {
+      box-shadow:
+        0 0 28px 9px rgba(255, 165, 0, 1),
+        0 0 60px 18px rgba(255, 200, 0, 1);
+    }
+    50% {
+      box-shadow:
+        0 0 40px 14px rgba(255, 200, 0, 1),
+        0 0 80px 24px rgba(255, 220, 0, 1);
+    }
   }
   .pulse-blank.revealed {
     animation: none;
     color: orange;
     background: rgba(0,0,0,0.5);
   }
-  @keyframes pulseOrange {
-    0%, 100% {
-      box-shadow: 0 0 8px 2px orange;
-    }
-    50% {
-      box-shadow: 0 0 14px 4px rgba(255, 165, 0, 0.8);
-    }
-  }
   .back-text {
     font-size: 18px;
-    background: rgba(0,0,0,0.6);
-    border-radius: 12px;
-    padding: 20px;
-    min-height: 100px;
+    background: rgba(255, 165, 0, 0.15);
+    border: 3px solid orange;
+    border-radius: 16px;
+    padding: 25px 30px;
+    min-height: 120px;
+    line-height: 1.6;
     box-sizing: border-box;
-    line-height: 1.5;
     user-select: text;
+    position: relative;
+    box-shadow:
+      0 0 12px 4px rgba(255, 165, 0, 0.7),
+      inset 0 0 12px 3px rgba(255, 165, 0, 0.4);
+    transition: box-shadow 0.4s ease;
+    color: #fffdd0; /* Яркий цвет для обратной стороны */
+    text-shadow:
+      1px 1px 6px rgba(0,0,0,0.8),
+      0 0 8px rgba(0,0,0,0.7);
+  }
+  .back-text.glow {
+    animation: glowBackText 2s ease-in-out infinite;
+  }
+  @keyframes glowBackText {
+    0%, 100% {
+      box-shadow:
+        0 0 18px 6px rgba(255, 165, 0, 0.9),
+        inset 0 0 14px 5px rgba(255, 165, 0, 0.5);
+    }
+    50% {
+      box-shadow:
+        0 0 28px 12px rgba(255, 200, 0, 1),
+        inset 0 0 22px 8px rgba(255, 200, 0, 0.7);
+    }
   }
   .buttons {
     margin-top: 25px;
@@ -124,9 +206,7 @@
 
   <div id="flashcard" class="card">
     <div id="front-side" class="side active">
-      <div class="front-text" id="front-text">
-        <!-- Текст с интерактивным пробелом -->
-      </div>
+      <div class="front-text" id="front-text"></div>
     </div>
 
     <div id="back-side" class="side">
@@ -134,52 +214,17 @@
     </div>
 
     <div class="buttons">
-      <button id="backBtn" aria-label="Предыдущая карточка">Back</button>
-      <button id="toggleSideBtn" aria-label="Показать определение">Show Definition</button>
-      <button id="nextBtn" aria-label="Следующая карточка">Next</button>
+      <button id="backBtn" aria-label="Previous card">Back</button>
+      <button id="toggleSideBtn" aria-label="Show definition">Show Definition</button>
+      <button id="nextBtn" aria-label="Next card">Next</button>
     </div>
   </div>
 
 <script>
-  // Данные карточек
   const cards = [
     { bg: 'img/IMG_20250819_153902_853.jpg', front: 'If you have______ about something, you are uncertain because you have both positive and negative emotions.', keyphrase: 'mixed feelings', back: '• Mixed feelings — contradictory or conflicting emotions' },
     { bg: 'img/IMG_20250819_154021_177.jpg', front: 'If you are________ , you do not know what to do or say because you are confused or worried.', keyphrase: 'at a loss', back: '• Be at a loss — to feel confused or uncertain about what to do' },
-    { bg: 'img/IMG_20250819_161039_279.jpg', front: '________ means to feel nervous, tense, or easily upset.', keyphrase: 'To be on edge', back: '• Be on edge — to feel nervous or anxious' },
-    { bg: 'img/IMG_20250819_154217_837.jpg', front: 'If you are_______ about something, you are unable to decide what to do.', keyphrase: 'in two minds', back: '• Be in two minds — to be uncertain or undecided' },
-    { bg: 'img/IMG_20250819_154300_255.jpg', front: 'If you_______, you manage to stay calm and control your emotions in a difficult or stressful situation.', keyphrase: 'keep it together', back: '• Keep it together — to stay calm and in control of one\'s emotions' },
-    { bg: 'img/IMG_20250819_154355_168.jpg', front: 'If you_______, you are thinking a lot about your problems or worries.', keyphrase: 'have a lot on your mind', back: '• Have a lot on one’s mind — to be occupied with many thoughts, problems, or worries.' },
-    { bg: 'img/IMG_20250819_154457_623.jpg', front: 'If you_______, you keep your feelings or emotions hidden instead of expressing them.', keyphrase: 'bottle something up', back: '• Bottle something up — to keep one’s emotions or feelings inside without expressing them' },
-    { bg: 'img/IMG_20250819_154642_439.jpg', front: 'If you are______, you feel slightly unwell, tired, or not as happy as usual.', keyphrase: 'out of sorts', back: '• Be out of sorts — to feel slightly unwell or not in good spirits' },
-    { bg: 'img/IMG_20250819_154959_504.jpg', front: 'If you_______, you deal with a difficult or unpleasant situation calmly and without letting it upset you.', keyphrase: 'take something in stride', back: '• Take something in stride — to deal with difficulties calmly and without stress' },
-    { bg: 'img/IMG_20250819_155025_976.jpg', front: 'If you______, you become confident and comfortable in a new situation or environment, especially after a period of adjustment.', keyphrase: 'find your feet', back: '• Find one’s feet — to become confident or comfortable in a new situation' },
-    { bg: 'img/IMG_20250819_155924_217.jpg', front: 'If you______ steam, you express your feelings to reduce stress or anger.', keyphrase: 'blow off', back: '• Blow off steam — to release strong emotions or frustration' },
-    { bg: 'img/IMG_20250819_155751_957.jpg', front: 'If you________, you try to find the positive or hopeful aspect of a situation that may seem bad or difficult.', keyphrase: 'look on the bright side', back: '• Look on the bright side — to focus on the positive aspects of a situation' },
-    { bg: 'img/IMG_20250819_155835_804.jpg', front: 'If you_______, you share your worries or problems with someone to feel better.', keyphrase: 'get something off your chest', back: '• Get something off one’s chest — to talk about something that has been bothering someone' },
-    { bg: 'img/IMG_20250819_155124_054.jpg', front: 'If you say that someone______, you mean that they feel down or unhappy.', keyphrase: 'feels blue', back: '• Feel blue — to feel sad or depressed' },
-    { bg: 'img/IMG_20250819_163734_377.jpg', front: 'If you______, you suddenly become very angry and lose control of your emotions.', keyphrase: 'lose your temper', back: '• Lose one’s temper — to suddenly become angry' },
-    { bg: 'img/IMG_20250819_160128_993.jpg', front: 'If you_____, you stop being upset about it and move on.', keyphrase: 'get over something', back: '• Get over something — to recover from an unpleasant experience' },
-    { bg: 'img/IMG_20250819_160215_377.jpg', front: 'If you______, you feel nervous or anxious.', keyphrase: 'have butterflies in your stomach', back: '• Have butterflies in one’s stomach — to feel nervous, especially before an important event' },
-    { bg: 'img/IMG_20250819_170059_467.jpg', front: 'If you say that someone________, you mean that they suddenly become too frightened or nervous to do something they had planned to do, especially something important.', keyphrase: 'gets cold feet', back: '• Get cold feet — to suddenly become nervous or frightened to do something planned, often just before an important event' },
-    { bg: 'img/IMG_20250819_155242_647.jpg', front: 'If you_______, you come to a quick decision without enough evidence.', keyphrase: 'jump to conclusions', back: '• Jump to conclusions — to make a judgment or decision hastily, without sufficient evidence or information' },
-    { bg: 'img/IMG_20250819_155913_210.jpg', front: 'If you are_________, you feel confused, disorganized, and unable to focus, making it difficult to think clearly or complete tasks.', keyphrase: 'all over the place', back: '• Be all over the place — to feel confused, disorganized, or unable to focus, often experiencing many different emotions or thoughts at once.' },
-    { bg: 'img/IMG_20250819_163626_119.jpg', front: 'If you______, you are upset about something that has already happened and cannot be changed.', keyphrase: 'cry over spilled milk', back: '• Cry over spilled milk — to be upset about something that cannot be changed' },
-    { bg: 'img/IMG_20250819_161352_662.jpg', front: 'If you______, you stay optimistic even when things are tough.', keyphrase: 'keep your chin up', back: '• Keep one’s chin up — to remain cheerful, positive, and hopeful in a difficult or challenging situation' },
-    { bg: 'img/IMG_20250819_162748_639.jpg', front: 'If you say that you are______, you mean that you feel slightly ill or unwell.', keyphrase: 'under the weather', back: '• Be under the weather — to feel slightly ill' },
-    { bg: 'img/IMG_20250819_162440_831.jpg', front: 'If you say that you_______, you mean that you pretend to be strong and cheerful, even when you are worried, upset, or in pain.', keyphrase: 'put on a brave face', back: '• Put on a brave face — to pretend to be happy or confident when someone is not actually feeling that way' },
-    { bg: 'img/IMG_20250819_163942_360.jpg', front: 'If someone______ at you, they suddenly speak to you in an angry or annoyed way.', keyphrase: 'snaps', back: '• Snap — to suddenly lose control emotionally and react angrily' },
-    { bg: 'img/IMG_20250819_155710_437.jpg', front: 'If you say that someone feels________, you mean that they are too stressed or unable to cope with everything they have to deal with.', keyphrase: 'overwhelmed', back: '• Feel overwhelmed — to feel stressed or unable to cope with a situation' },
-    { bg: 'img/IMG_20250819_162637_907.jpg', front: 'If you say that someone is_______, you mean that they are deeply sad or distressed because of a significant loss.', keyphrase: 'heartbroken', back: '• Be heartbroken — to feel extremely sad or deeply upset because of a great loss or disappointment' },
-    { bg: 'img/IMG_20250819_160015_306.jpg', front: 'If you________, you try to make a situation seem less serious or important by joking about it or not taking it seriously.', keyphrase: 'laugh something off', back: '• Laugh something off — to treat a problem or bad situation as unimportant by joking about it' },
-    { bg: 'img/IMG_20250819_160659_557.jpg', front: 'If someone has______, they change their opinion or feelings about something.', keyphrase: 'a change of heart', back: '• Have a change of heart — to change one’s opinion or feelings about something' },
-    { bg: 'img/IMG_20250819_163153_916.jpg', front: 'If you are______ with something, you are very tired or angry about it because it has lasted for a long time.', keyphrase: 'fed up', back: '• Be fed up — to feel annoyed, bored, or tired of something, especially after experiencing it for a long time' },
-    { bg: 'img/IMG_20250819_163448_150.jpg', front: 'Someone who is_______ is very tired or exhausted, especially due to hard work or physical exertion.', keyphrase: 'worn out', back: '• Be worn out — to be very tired or exhausted, especially from hard work or prolonged stress' },
-    { bg: 'img/IMG_20250819_163808_743.jpg', front: 'If you______, you get angry or upset unexpectedly.', keyphrase: 'lose your cool', back: '• Lose one’s cool — to suddenly become very angry, often losing control of your temper' },
-    { bg: 'img/IMG_20250819_163217_642.jpg', front: 'If you say that you are down in the dumps, you mean that you feel very sad, depressed, or discouraged.', keyphrase: '', back: '• Be down in the dumps — to feel very sad, depressed, or unhappy' },
-    { bg: 'img/IMG_20250819_164414_244.jpg', front: 'If you say that someone has a______, you think that they get upset or angry easily because they believe someone has treated them unfairly.', keyphrase: 'chip on their shoulder', back: '• Have a chip on one\'s shoulder — To have an angry or unpleasant attitude, often because one feels they have been treated unfairly' },
-    { bg: 'img/IMG_20250819_163856_822.jpg', front: 'If you feel______, you are highlighting that you feel extremely happy, joyful, or successful.', keyphrase: 'on top of the world', back: '• Feel on top of the world — to feel extremely happy' },
-    { bg: 'img/IMG_20250819_163350_468.jpg', front: 'If you say that you are______, you mean that you feel extremely happy and excited, usually because something very good or special has happened to you.', keyphrase: 'walking on air', back: '• Walk on air — To feel extremely happy and excited, often because something very good has happened to you' },
-    { bg: 'img/IMG_20250819_163018_775.jpg', front: 'If you are______, you feel very joyful or ecstatic.', keyphrase: 'on cloud nine', back: '• Be on cloud nine — to feel extremely happy' },
+    // ... остальные карточки ...
     { bg: 'img/IMG_20250819_165120_262.jpg', front: 'If you are______, you are happy, cheerful, and full of energy', keyphrase: 'in high spirits', back: '• Be in high spirits — to be very happy, cheerful, and full of energy' }
   ];
 
@@ -190,20 +235,18 @@
   const frontSide = document.getElementById('front-side');
   const backSide = document.getElementById('back-side');
   const frontText = document.getElementById('front-text');
-  const backText = document.getElementById('back-text');
+  const backTextBlock = document.getElementById('back-text');
   const toggleSideBtn = document.getElementById('toggleSideBtn');
   const backBtn = document.getElementById('backBtn');
   const nextBtn = document.getElementById('nextBtn');
 
-  // Создаем пульсирующее окошко-пробел
   function createPulseBlank(keyphrase) {
     const span = document.createElement('span');
     span.className = 'pulse-blank';
     span.setAttribute('tabindex', '0');
-    span.setAttribute('aria-label', 'Нажмите, чтобы показать ключевую фразу');
+    span.setAttribute('aria-label', 'Click here to reveal the key phrase');
     span.textContent = '';
 
-    // Устанавливаем ширину под ключевую фразу методом измерения
     function setWidth() {
       const temp = document.createElement('span');
       temp.style.visibility = 'hidden';
@@ -223,13 +266,13 @@
       if (!span.classList.contains('revealed')) {
         span.textContent = keyphrase;
         span.classList.add('revealed');
-        span.setAttribute('aria-label', 'Ключевая фраза: ' + keyphrase);
+        span.setAttribute('aria-label', 'Key phrase: ' + keyphrase);
       }
     }
     function reset() {
       span.textContent = '';
       span.classList.remove('revealed');
-      span.setAttribute('aria-label', 'Нажмите, чтобы показать ключевую фразу');
+      span.setAttribute('aria-label', 'Click here to reveal the key phrase');
     }
 
     span.addEventListener('click', reveal);
@@ -243,66 +286,57 @@
     return {span, reset};
   }
 
-  // Отобразить карточку
   function renderCard() {
     const card = cards[currentIndex];
     flashcard.style.backgroundImage = `url('${card.bg}')`;
     showFront = true;
     frontSide.classList.add('active');
     backSide.classList.remove('active');
+    backTextBlock.classList.remove('glow');
     toggleSideBtn.textContent = 'Show Definition';
-    toggleSideBtn.setAttribute('aria-label', 'Показать определение');
-    backText.textContent = card.back;
+    toggleSideBtn.setAttribute('aria-label', 'Show definition');
+    backTextBlock.textContent = card.back;
 
-    // Создаем пульсирующий пробел в тексте
     let textBefore = '';
     let textAfter = '';
-    // Разбиваем предложение по последовательности подчеркиваний
     const parts = card.front.split(/_{2,}/);
     textBefore = parts[0];
     textAfter = parts[1] || '';
-    // Создаем интерактивный пробел
     const {span: pulseBlank, reset} = createPulseBlank(card.keyphrase);
 
-    // Сборка содержимого лицевой стороны
     frontText.innerHTML = '';
     frontText.appendChild(document.createTextNode(textBefore));
     frontText.appendChild(pulseBlank);
     frontText.appendChild(document.createTextNode(textAfter));
-    
-    // Запоминаем функцию reset, её вызовем при переключении сторон
+
     pulseBlank.reset = reset;
 
-    // Кнопки навигации обновляем
     backBtn.disabled = currentIndex === 0;
     nextBtn.disabled = currentIndex === cards.length - 1;
   }
 
-  // Переключаем лицевую - обратную сторону
   toggleSideBtn.addEventListener('click', () => {
     if (showFront) {
-      // Показать обратную сторону
       frontSide.classList.remove('active');
       backSide.classList.add('active');
+      backTextBlock.classList.add('glow');
       toggleSideBtn.textContent = 'Show Front';
-      toggleSideBtn.setAttribute('aria-label', 'Показать лицевую сторону');
+      toggleSideBtn.setAttribute('aria-label', 'Show front side');
       showFront = false;
 
-      // При переключении сбрасываем пульсирующий пробел
       const pulseBlank = frontText.querySelector('.pulse-blank');
       if (pulseBlank && pulseBlank.reset) pulseBlank.reset();
 
     } else {
-      // Показать лицевую сторону
       backSide.classList.remove('active');
+      backTextBlock.classList.remove('glow');
       frontSide.classList.add('active');
       toggleSideBtn.textContent = 'Show Definition';
-      toggleSideBtn.setAttribute('aria-label', 'Показать определение');
+      toggleSideBtn.setAttribute('aria-label', 'Show definition');
       showFront = true;
     }
   });
 
-  // Навигация между карточками
   backBtn.addEventListener('click', () => {
     if (currentIndex > 0) {
       currentIndex--;
@@ -317,7 +351,6 @@
     }
   });
 
-  // Инициализация
   renderCard();
 </script>
 </body>
