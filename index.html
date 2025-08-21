@@ -15,7 +15,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
     padding: 20px;
   }
   h1 {
@@ -24,85 +23,92 @@
     user-select: none;
   }
   .card {
-    width: 320px;
-    height: 440px;
-    position: relative;
+    width: 360px;
+    height: 460px;
     background-size: cover;
     background-position: center;
     border-radius: 15px;
     box-shadow: 0 8px 20px rgba(0,0,0,0.7);
-    padding: 20px;
+    padding: 25px 30px;
     box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+    user-select: none;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    backdrop-filter: brightness(0.6);
-    user-select: none;
+    justify-content: center;
+  }
+  .side {
+    display: none;
+    color: white;
+  }
+  .side.active {
+    display: block;
   }
   .front-text {
     font-size: 20px;
     line-height: 1.4;
-    outline: none;
   }
   .pulse-blank {
     display: inline-block;
-    min-width: 110px;
-    border-bottom: 2px solid orange;
-    position: relative;
+    min-width: 90px;
+    border-radius: 8px;
+    border: 2px solid orange;
+    box-sizing: border-box;
     cursor: pointer;
-    animation: pulseOrange 2s infinite;
+    padding: 4px 10px;
+    font-weight: bold;
     color: transparent;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 18px;
+    animation: pulseOrange 2s infinite;
+    user-select: none;
+    transition: color 0.3s ease, min-width 0.3s ease;
+    white-space: nowrap;
+  }
+  .pulse-blank.revealed {
+    animation: none;
+    color: orange;
+    background: rgba(0,0,0,0.5);
   }
   @keyframes pulseOrange {
     0%, 100% {
       box-shadow: 0 0 8px 2px orange;
     }
     50% {
-      box-shadow: 0 0 12px 4px rgba(255, 165, 0, 0.7);
+      box-shadow: 0 0 14px 4px rgba(255, 165, 0, 0.8);
     }
   }
-  .keyphrase-popup {
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    background: rgba(0,0,0,0.85);
-    color: #ffa500;
-    padding: 12px 20px;
-    border-radius: 12px;
-    font-size: 24px;
-    font-weight: bold;
-    max-width: 90%;
-    text-align: center;
-    white-space: nowrap;
-    box-shadow: 0 0 15px 5px orange;
-    z-index: 10;
-    display: none;
-  }
   .back-text {
-    font-size: 16px;
+    font-size: 18px;
     background: rgba(0,0,0,0.6);
-    border-radius: 10px;
-    padding: 15px;
-    margin-top: 20px;
-    min-height: 60px;
+    border-radius: 12px;
+    padding: 20px;
+    min-height: 100px;
+    box-sizing: border-box;
+    line-height: 1.5;
+    user-select: text;
   }
-  .nav-buttons {
-    margin-top: 15px;
-    width: 100%;
+  .buttons {
+    margin-top: 25px;
     display: flex;
     justify-content: space-between;
+    gap: 10px;
   }
   button {
+    flex: 1;
     background: orange;
     border: none;
-    padding: 10px 25px;
-    border-radius: 10px;
+    padding: 12px 15px;
+    border-radius: 12px;
     font-weight: bold;
     cursor: pointer;
     color: black;
-    box-shadow: 0 0 6px 1px #ffb347;
+    box-shadow: 0 0 8px 2px #ffb347;
     transition: background-color 0.3s ease;
     user-select: none;
+    font-size: 16px;
   }
   button:hover:not(:disabled) {
     background: #ff9c00;
@@ -116,22 +122,26 @@
 <body>
   <h1>Describing Emotions and Feelings</h1>
 
-  <div id="flashcard" class="card" role="region" aria-label="Flashcard">
-    <div class="front-text" id="front-text" tabindex="0" aria-live="polite" aria-atomic="true">
-      <!-- Текст с пустым пробелом вставляется JS -->
+  <div id="flashcard" class="card">
+    <div id="front-side" class="side active">
+      <div class="front-text" id="front-text">
+        <!-- Текст с интерактивным пробелом -->
+      </div>
     </div>
 
-    <div class="keyphrase-popup" id="keyphrase-popup" role="alert" aria-live="assertive" aria-atomic="true"></div>
+    <div id="back-side" class="side">
+      <div class="back-text" id="back-text"></div>
+    </div>
 
-    <div class="back-text" id="back-text" style="display:none;"></div>
-
-    <div class="nav-buttons">
-      <button id="backBtn" aria-label="Previous card">Back</button>
-      <button id="nextBtn" aria-label="Next card">Next</button>
+    <div class="buttons">
+      <button id="backBtn" aria-label="Предыдущая карточка">Back</button>
+      <button id="toggleSideBtn" aria-label="Показать определение">Show Definition</button>
+      <button id="nextBtn" aria-label="Следующая карточка">Next</button>
     </div>
   </div>
 
 <script>
+  // Данные карточек
   const cards = [
     { bg: 'img/IMG_20250819_153902_853.jpg', front: 'If you have______ about something, you are uncertain because you have both positive and negative emotions.', keyphrase: 'mixed feelings', back: '• Mixed feelings — contradictory or conflicting emotions' },
     { bg: 'img/IMG_20250819_154021_177.jpg', front: 'If you are________ , you do not know what to do or say because you are confused or worried.', keyphrase: 'at a loss', back: '• Be at a loss — to feel confused or uncertain about what to do' },
@@ -174,78 +184,141 @@
   ];
 
   let currentIndex = 0;
+  let showFront = true;
 
   const flashcard = document.getElementById('flashcard');
+  const frontSide = document.getElementById('front-side');
+  const backSide = document.getElementById('back-side');
   const frontText = document.getElementById('front-text');
-  const keyphrasePopup = document.getElementById('keyphrase-popup');
   const backText = document.getElementById('back-text');
+  const toggleSideBtn = document.getElementById('toggleSideBtn');
   const backBtn = document.getElementById('backBtn');
   const nextBtn = document.getElementById('nextBtn');
 
-  function setCard(index) {
-    const card = cards[index];
-    flashcard.style.backgroundImage = `url('${card.bg}')`;
+  // Создаем пульсирующее окошко-пробел
+  function createPulseBlank(keyphrase) {
+    const span = document.createElement('span');
+    span.className = 'pulse-blank';
+    span.setAttribute('tabindex', '0');
+    span.setAttribute('aria-label', 'Нажмите, чтобы показать ключевую фразу');
+    span.textContent = '';
 
-    // Заменяем пробелы с подчеркиваниями на пульсирующий span
-    const pulseSpanHTML = '<span class="pulse-blank" tabindex="0" aria-label="Нажмите, чтобы показать ключевую фразу"></span>';
-    let frontHTML = card.front.replace(/_{2,}/g, pulseSpanHTML);
-    frontText.innerHTML = frontHTML;
-
-    keyphrasePopup.style.display = 'none';
-    backText.style.display = 'none';
-    backText.textContent = '';
-
-    backBtn.disabled = index === 0;
-    nextBtn.disabled = index === cards.length - 1;
-
-    // Навешиваем обработчики на пробел
-    const blank = frontText.querySelector('.pulse-blank');
-    if (blank) {
-      blank.style.animation = 'pulseOrange 2s infinite';
-      blank.style.color = 'transparent';
-
-      function showKeyphrase() {
-        keyphrasePopup.textContent = card.keyphrase || '(Отсутствует)';
-        keyphrasePopup.style.display = 'block';
-
-        backText.textContent = card.back;
-        backText.style.display = 'block';
-
-        blank.style.animation = 'none';
-        blank.style.color = 'orange';
-      }
-
-      // Удаляем старые обработчики, чтобы не было дубликатов
-      blank.replaceWith(blank.cloneNode(true));
-      const newBlank = frontText.querySelector('.pulse-blank');
-      newBlank.style.animation = 'pulseOrange 2s infinite';
-      newBlank.style.color = 'transparent';
-
-      newBlank.addEventListener('click', showKeyphrase);
-      newBlank.addEventListener('keydown', e => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          showKeyphrase();
-        }
-      });
+    // Устанавливаем ширину под ключевую фразу методом измерения
+    function setWidth() {
+      const temp = document.createElement('span');
+      temp.style.visibility = 'hidden';
+      temp.style.position = 'absolute';
+      temp.style.whiteSpace = 'nowrap';
+      temp.style.fontSize = '18px';
+      temp.style.fontWeight = 'bold';
+      temp.textContent = keyphrase;
+      document.body.appendChild(temp);
+      const w = temp.offsetWidth + 20;
+      document.body.removeChild(temp);
+      span.style.minWidth = w + 'px';
     }
+    setWidth();
+
+    function reveal() {
+      if (!span.classList.contains('revealed')) {
+        span.textContent = keyphrase;
+        span.classList.add('revealed');
+        span.setAttribute('aria-label', 'Ключевая фраза: ' + keyphrase);
+      }
+    }
+    function reset() {
+      span.textContent = '';
+      span.classList.remove('revealed');
+      span.setAttribute('aria-label', 'Нажмите, чтобы показать ключевую фразу');
+    }
+
+    span.addEventListener('click', reveal);
+    span.addEventListener('keydown', (e) => {
+      if ((e.key === 'Enter' || e.key === ' ') && !span.classList.contains('revealed')) {
+        e.preventDefault();
+        reveal();
+      }
+    });
+
+    return {span, reset};
   }
 
+  // Отобразить карточку
+  function renderCard() {
+    const card = cards[currentIndex];
+    flashcard.style.backgroundImage = `url('${card.bg}')`;
+    showFront = true;
+    frontSide.classList.add('active');
+    backSide.classList.remove('active');
+    toggleSideBtn.textContent = 'Show Definition';
+    toggleSideBtn.setAttribute('aria-label', 'Показать определение');
+    backText.textContent = card.back;
+
+    // Создаем пульсирующий пробел в тексте
+    let textBefore = '';
+    let textAfter = '';
+    // Разбиваем предложение по последовательности подчеркиваний
+    const parts = card.front.split(/_{2,}/);
+    textBefore = parts[0];
+    textAfter = parts[1] || '';
+    // Создаем интерактивный пробел
+    const {span: pulseBlank, reset} = createPulseBlank(card.keyphrase);
+
+    // Сборка содержимого лицевой стороны
+    frontText.innerHTML = '';
+    frontText.appendChild(document.createTextNode(textBefore));
+    frontText.appendChild(pulseBlank);
+    frontText.appendChild(document.createTextNode(textAfter));
+    
+    // Запоминаем функцию reset, её вызовем при переключении сторон
+    pulseBlank.reset = reset;
+
+    // Кнопки навигации обновляем
+    backBtn.disabled = currentIndex === 0;
+    nextBtn.disabled = currentIndex === cards.length - 1;
+  }
+
+  // Переключаем лицевую - обратную сторону
+  toggleSideBtn.addEventListener('click', () => {
+    if (showFront) {
+      // Показать обратную сторону
+      frontSide.classList.remove('active');
+      backSide.classList.add('active');
+      toggleSideBtn.textContent = 'Show Front';
+      toggleSideBtn.setAttribute('aria-label', 'Показать лицевую сторону');
+      showFront = false;
+
+      // При переключении сбрасываем пульсирующий пробел
+      const pulseBlank = frontText.querySelector('.pulse-blank');
+      if (pulseBlank && pulseBlank.reset) pulseBlank.reset();
+
+    } else {
+      // Показать лицевую сторону
+      backSide.classList.remove('active');
+      frontSide.classList.add('active');
+      toggleSideBtn.textContent = 'Show Definition';
+      toggleSideBtn.setAttribute('aria-label', 'Показать определение');
+      showFront = true;
+    }
+  });
+
+  // Навигация между карточками
   backBtn.addEventListener('click', () => {
-    if(currentIndex > 0){
+    if (currentIndex > 0) {
       currentIndex--;
-      setCard(currentIndex);
+      renderCard();
     }
   });
 
   nextBtn.addEventListener('click', () => {
-    if(currentIndex < cards.length - 1){
+    if (currentIndex < cards.length - 1) {
       currentIndex++;
-      setCard(currentIndex);
+      renderCard();
     }
   });
 
-  setCard(currentIndex);
+  // Инициализация
+  renderCard();
 </script>
 </body>
 </html>
