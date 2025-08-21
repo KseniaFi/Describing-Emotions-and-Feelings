@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Describing Emotions and Feelings - Flashcard</title>
 <style>
-  /* Фон всего проекта - локальный файл */
+  /* Фон всего проекта */
   body {
     background-image: url('img/IMG_20250820_221358_590.jpg');
     background-size: cover;
@@ -21,7 +21,7 @@
     color: #4b3a23;
   }
 
-  /* Заголовок с ярким оранжевым свечением */
+  /* Заголовок */
   .topic {
     font-weight: 900;
     font-size: 38px;
@@ -44,8 +44,7 @@
     border-radius: 20px;
     position: relative;
     overflow: hidden;
-    box-shadow:
-      0 8px 20px rgba(0,0,0,0.5);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.5);
     color: #ffd966;
   }
 
@@ -57,18 +56,18 @@
     pointer-events: none;
     z-index: 0;
   }
-/* Вся лента карточек: 76 сторон (38 карточек × 2 стороны) */
-  .flashcards-wrapper {
-  display: flex;
-  width: 27360px; /* 38 карточек × 2 стороны = 76 сторон × 360px */
-  height: 100%;
-  border-radius: 20px;
-  transition: transform 0.7s ease-in-out;
-  position: relative;
-  z-index: 1;
-}
 
-  
+/* Лента карточек */
+  .flashcards-wrapper {
+    display: flex;
+    width: 27360px; /* 38 карточек × 2 стороны × 360px */
+    height: 100%;
+    border-radius: 20px;
+    transition: transform 0.7s ease-in-out;
+    position: relative;
+    z-index: 1;
+  }
+
   /* Каждая сторона карточки */
   .flashcard-side {
     flex: 0 0 360px;
