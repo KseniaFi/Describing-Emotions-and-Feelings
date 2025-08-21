@@ -5,149 +5,134 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Describing Emotions and Feelings - Flashcards</title>
 <style>
- body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: url('img/IMG_20250820_221358_590.jpg') no-repeat center center fixed;
-  background-size: cover;
-  color: #fff;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-}
-h1 {
-  margin-bottom: 30px;
-  text-shadow: 2px 2px 6px #000;
-  user-select: none;
-}
-.card {
-  width: 360px;
-  height: 460px;
-  background-size: cover;
-  background-position: center;
-  border-radius: 15px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.7);
-  padding: 25px 30px;
-  box-sizing: border-box;
-  position: relative;
-  overflow: hidden;
-  user-select: none;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-/* Затемняющий слой поверх фона */
-.card::before {
-  content: "";
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background-color: rgba(0, 0, 0, 0.45);
-  pointer-events: none;
-  border-radius: 15px;
-  z-index: 1;
-}
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: url('img/IMG_20250820_221358_590.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+  h1 {
+    margin-bottom: 30px;
+    text-shadow: 2px 2px 6px #000;
+    user-select: none;
+  }
+  .card {
+    width: 360px;
+    height: 460px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.7);
+    padding: 25px 30px;
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+    user-select: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  /* Затемняющий слой поверх фона */
+  .card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(0, 0, 0, 0.45);
+    pointer-events: none;
+    border-radius: 15px;
+    z-index: 1;
+  }
 
-.side {
-  display: none;
-  color: white;
-  position: relative;
-  z-index: 2; /* Чтобы текст был над затемнением */
-}
-.side.active {
-  display: block;
-}
+  .side {
+    display: none;
+    color: white;
+    position: relative;
+    z-index: 2; /* Чтобы текст был над затемнением */
+  }
+  .side.active {
+    display: block;
+  }
 
-/* Яркий, читаемый текст с тенью для контраста */
-.front-text {
-  font-size: 21px;
-  line-height: 1.5;
-  color: #fffdd0; /* светло-слоновая кость для лучшей читаемости */
-  text-shadow:
-    1px 1px 4px rgba(0, 0, 0, 0.8),
-    0 0 8px rgba(0, 0, 0, 0.7);
-  position: relative;
-  z-index: 2;
-}
+  /* Яркий, читаемый текст с тенью для контраста */
+  .front-text {
+    font-size: 21px;
+    line-height: 1.5;
+    color: #fffdd0; /* светло-слоновая кость для лучшей читаемости */
+    text-shadow:
+      1px 1px 4px rgba(0, 0, 0, 0.8),
+      0 0 8px rgba(0, 0, 0, 0.7);
+    position: relative;
+    z-index: 2;
+  }
 
   .pulse-blank {
-  display: inline-block;
-  min-width: 90px;
-  border-radius: 8px;
-  border: 3px solid #FF8C00; /* ярко оранжевый */
-  box-sizing: border-box;
-  cursor: pointer;
-  padding: 8px 16px;
-  font-weight: bold;
-  color: transparent;
-  text-align: center;
-  vertical-align: middle;
-  font-size: 18px;
-  animation: pulseBrightOrange 1.2s infinite ease-in-out;
-  user-select: none;
-  transition: color 0.3s ease, min-width 0.3s ease, box-shadow 0.4s ease, transform 0.3s ease;
-  white-space: nowrap;
-  position: relative;
-  /* Тень яркого свечения */
-  box-shadow:
-    0 0 10px 4px #FF8C00,
-    0 0 20px 8px rgba(255, 140, 0, 0.8);
-}
-
-/* Анимация пульсации яркого оранжевого */
-@keyframes pulseBrightOrange {
-  0%, 100% {
+    display: inline-block;
+    min-width: 90px;
+    border-radius: 8px;
+    border: 3px solid #FF8C00; /* ярко оранжевый */
+    box-sizing: border-box;
+    cursor: pointer;
+    padding: 8px 16px;
+    font-weight: bold;
+    color: transparent;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 18px;
+    animation: pulseBrightOrange 1.2s infinite ease-in-out;
+    user-select: none;
+    transition: color 0.3s ease, min-width 0.3s ease, box-shadow 0.4s ease, transform 0.3s ease;
+    white-space: nowrap;
+    position: relative;
+    /* Тень яркого свечения */
     box-shadow:
-      0 0 12px 6px #FF8C00,
-      0 0 28px 12px rgba(255, 165, 0, 0.9);
+      0 0 10px 4px #FF8C00,
+      0 0 20px 8px rgba(255, 140, 0, 0.8);
   }
-  50% {
-    box-shadow:
-      0 0 20px 10px #FFA500,
-      0 0 38px 16px rgba(255, 180, 0, 1);
-  }
-}
-
-/* Постоянное уведомление "Click here" сверху окошка */
-.pulse-blank::before {
-  content: "Click here";
-  position: absolute;
-  top: -26px; /* над окошком */
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 14px;
-  font-weight: 700;
-  color: #FFA500;
-  text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
-  white-space: nowrap;
-  pointer-events: none; /* чтобы не мешал клику */
-  user-select: none;
-  z-index: 10;
-}
-  /* Изменённый tooltip с текстом на английском */
-  .pulse-blank::after {
+  /* Тултип "Click here" всегда виден сверху окошка */
+  .pulse-blank::before {
     content: "Click here";
     position: absolute;
-    bottom: 125%;
+    top: -26px; /* над окошком */
     left: 50%;
     transform: translateX(-50%);
-    background: rgba(255, 165, 0, 0.95);
-    color: black;
-    padding: 6px 10px;
-    border-radius: 8px;
     font-size: 14px;
-    white-space: nowrap;
-    opacity: 1; /* Теперь подсказка всегда видна */
-    pointer-events: none;
-    box-shadow: 0 0 8px rgba(255, 165, 0, 0.8);
     font-weight: 700;
+    color: #FFA500;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+    white-space: nowrap;
+    pointer-events: none; /* чтобы не мешал клику */
+    user-select: none;
+    z-index: 10;
   }
-  /* Пропадает при раскрытом ключе */
-  .pulse-blank.revealed::after {
-    opacity: 0;
+  @keyframes pulseBrightOrange {
+    0%, 100% {
+      box-shadow:
+        0 0 12px 6px #FF8C00,
+        0 0 28px 12px rgba(255, 165, 0, 0.9);
+    }
+    50% {
+      box-shadow:
+        0 0 20px 10px #FFA500,
+        0 0 38px 16px rgba(255, 180, 0, 1);
+    }
   }
-
+  .pulse-blank.revealed {
+    animation: none;
+    color: orange;
+    background: rgba(0,0,0,0.5);
+    box-shadow:
+      0 0 14px 6px #FFA500,
+      0 0 28px 10px rgba(255, 165, 0, 0.9);
+  }
+  .pulse-blank.revealed::before {
+    opacity: 0; /* Скрыть тултип после раскрытия */
+  }
   .pulse-blank:hover,
   .pulse-blank:focus {
     color: orange;
@@ -170,11 +155,7 @@ h1 {
         0 0 80px 24px rgba(255, 220, 0, 1);
     }
   }
-  .pulse-blank.revealed {
-    animation: none;
-    color: orange;
-    background: rgba(0,0,0,0.5);
-  }
+
   .back-text {
     font-size: 18px;
     background: rgba(255, 165, 0, 0.15);
@@ -190,10 +171,11 @@ h1 {
       0 0 12px 4px rgba(255, 165, 0, 0.7),
       inset 0 0 12px 3px rgba(255, 165, 0, 0.4);
     transition: box-shadow 0.4s ease;
-    color: #fffdd0; /* Яркий цвет для обратной стороны */
+    color: #fffdd0; /* Яркий цвет для текста */
     text-shadow:
       1px 1px 6px rgba(0,0,0,0.8),
       0 0 8px rgba(0,0,0,0.7);
+    z-index: 2;
   }
   .back-text.glow {
     animation: glowBackText 2s ease-in-out infinite;
@@ -215,6 +197,8 @@ h1 {
     display: flex;
     justify-content: space-between;
     gap: 10px;
+    position: relative;
+    z-index: 2;
   }
   button {
     flex: 1;
@@ -299,7 +283,6 @@ h1 {
     { bg: 'img/IMG_20250819_163018_775.jpg', front: 'If you are______, you feel very joyful or ecstatic.', keyphrase: 'on cloud nine', back: '• Be on cloud nine — to feel extremely happy' },
     { bg: 'img/IMG_20250819_165120_262.jpg', front: 'If you are______, you are happy, cheerful, and full of energy', keyphrase: 'in high spirits', back: '• Be in high spirits — to be very happy, cheerful, and full of energy' }
   ];
-</script>
 
   let currentIndex = 0;
   let showFront = true;
