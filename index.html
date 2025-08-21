@@ -3,76 +3,108 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>60's Style Flashcard Sliding</title>
+<title>Describing Emotions and Feelings - Flashcard</title>
 <style>
+  /* Общий фон проекта — img/IMG_20250820_221358_590.jpg из локальной папки images */
   body {
-    background: #f1e7dc;
+    background-image: url('images/IMG_20250820_221358_590.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    margin: 0;
+    min-height: 100vh;
     font-family: 'Helvetica Neue', Arial, sans-serif;
     display: flex;
-    justify-content: center;
-    align-items: center;
     flex-direction: column;
-    height: 100vh;
-    margin: 0;
+    align-items: center;
+    padding: 40px 20px 20px;
+    color: #4b3a23;
   }
 
+  /* Заголовок с ярким оранжевым свечением */
+  .topic {
+    font-weight: 900;
+    font-size: 38px;
+    color: #5b3a00;
+    user-select: none;
+    margin-bottom: 36px;
+    text-shadow:
+      0 0 5px #ff9f00,
+      0 0 10px #ff8c00,
+      0 0 20px #ff7a00,
+      0 0 30px #ff6600,
+      0 0 40px #ff5500,
+      0 0 50px #ff4400;
+  }
+
+  /* Контейнер карточек */
   .flashcard-container {
     width: 360px;
     height: 230px;
-    overflow: hidden;
     border-radius: 20px;
-    box-shadow:
-      0 8px 18px rgba(0,0,0,0.25),
-      inset 0 0 30px rgba(255, 255, 255, 0.15);
     position: relative;
-    background-image: url('IMG-20250819-170059-467.jpg');
-    background-size: cover;
-    background-position: center;
+    overflow: hidden;
+    box-shadow:
+      0 8px 20px rgba(0,0,0,0.5);
+    color: #ffd966;
   }
 
   .overlay {
     position: absolute;
     inset: 0;
-    background: rgba(50, 37, 25, 0.6); /* более тёмный для читаемости */
+    background: rgba(50, 37, 25, 0.65);
     border-radius: 20px;
     pointer-events: none;
     z-index: 0;
   }
 
-  .content-wrapper {
-    position: relative;
-    color: #f0ead8;
-    height: 100%;
-    padding: 30px 28px;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    z-index: 1;
-    /* Фон под текст для контраста */
-    background: rgba(164, 135, 107, 0.5); /* тёплый мокко полупрозрачный */
-    border-radius: 16px;
-  }
-
+  /* Вся лента карточек: 4 стороны (2 карточки × 2 стороны) */
   .flashcards-wrapper {
     display: flex;
-    width: 720px; /* 2 cards side by side */
+    width: 1440px; /* 4 × 360 */
     height: 100%;
     border-radius: 20px;
     transition: transform 0.7s ease-in-out;
+    position: relative;
+    z-index: 1;
   }
 
+  /* Каждая сторона карточки */
   .flashcard-side {
     flex: 0 0 360px;
     height: 100%;
-    color: #f5f1ea;
     box-sizing: border-box;
-    text-shadow: 1.5px 1.5px 3px rgba(0,0,0,0.6);
-    background: transparent !important; /* скрываем фон, т.к. общий фон у контейнера */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 0;
+    padding: 30px 28px;
+    color: #ffd966;
+    text-shadow: 1.5px 1.5px 3px rgba(0,0,0,0.85);
+    position: relative;
+    z-index: 1;
+    border-radius: 20px;
+  }
+
+  /* Фоны карточек с локальными путями */
+  .front-1 {
+    background-image: url('images/IMG_20250819_153902_853.jpg');
+    box-shadow: inset 0 0 40px rgba(255, 140, 0, 0.5);
+  }
+  .back-1 {
+    background-image: url('images/IMG_20250819_153902_853.jpg');
+    box-shadow: inset 0 0 40px rgba(255, 140, 0, 0.7);
+  }
+
+  .front-2 {
+    background-image: url('images/IMG_20250819_154021_177.jpg');
+    box-shadow: inset 0 0 40px rgba(50, 30, 10, 0.5);
+  }
+  .back-2 {
+    background-image: url('images/IMG_20250819_154021_177.jpg');
+    box-shadow: inset 0 0 40px rgba(50, 30, 10, 0.7);
   }
 
   .title {
@@ -88,14 +120,78 @@
     line-height: 1.45;
   }
 
-  .emoji {
-    font-size: 24px;
-    margin-right: 10px;
-    vertical-align: middle;
+  /* Светящийся пробел */
+  .interactive-blank {
+    display: inline-block;
+    margin: 0 4px;
+    padding: 2px 10px;
+    min-width: 120px;
+    max-width: 100%;
+    border-radius: 8px;
+    background: #663300;
+    box-shadow:
+      0 0 8px 3px rgba(255, 140, 0, 0.9);
+    cursor: pointer;
+    color: transparent;
+    user-select: none;
+    font-weight: 600;
+    animation: pulseOrange 2.2s infinite;
+    text-align: center;
+    white-space: nowrap;
+    height: 28px;
+    line-height: 28px;
   }
-  
-  button {
-    margin-top: 20px;
+
+  .interactive-blank.revealed {
+    animation: none;
+    color: #fff;
+    background: #a65e00;
+    box-shadow:
+      0 0 12px 6px rgba(255, 165, 0, 1),
+      0 0 20px 10px rgba(255, 140, 0, 0.8);
+    cursor: default;
+    padding-left: 0;
+    padding-right: 0;
+    white-space: normal;
+    text-shadow:
+      0 0 6px #ff9500,
+      0 0 12px #ff9500;
+  }
+
+  /* Ключевое слово ярко оранжевое с свечением */
+  .key-phrase {
+    color: #fff;
+    font-weight: 700;
+    font-style: italic;
+    text-shadow:
+      0 0 8px #ff9500,
+      0 0 18px #ff7400,
+      0 0 25px #ff6400;
+  }
+
+  @keyframes pulseOrange {
+    0% {
+      box-shadow:
+        0 0 6px 2px rgba(255, 140, 0, 0.9);
+      background: #663300;
+      color: transparent;
+    }
+    50% {
+      box-shadow:
+        0 0 20px 6px rgba(255, 165, 0, 1);
+      background: #804000;
+      color: transparent;
+    }
+    100% {
+      box-shadow:
+        0 0 6px 2px rgba(255, 140, 0, 0.9);
+      background: #663300;
+      color: transparent;
+    }
+  }
+
+  button#toggleBtn {
+    margin-top: 30px;
     background: rgba(164, 135, 107, 0.75);
     border: none;
     color: #f5f1ea;
@@ -105,53 +201,193 @@
     cursor: pointer;
     transition: background 0.3s ease;
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    user-select: none;
   }
-  button:hover {
+  button#toggleBtn:hover {
     background: rgba(164, 135, 107, 1);
   }
 </style>
 </head>
 <body>
 
-<div class="flashcard-container" aria-label="Flashcard">
+<div class="topic" aria-label="Общий заголовок набора карточек">Describing Emotions and Feelings</div>
+
+<div class="flashcard-container" aria-label="Flashcard set" role="region" aria-live="polite" aria-atomic="true">
   <div class="overlay"></div>
   <div class="flashcards-wrapper" id="flashcardsWrapper">
-    <div class="flashcard-side flashcard-front" aria-labelledby="titleFront" aria-describedby="descFront">
-      <div class="content-wrapper">
-        <div class="title" id="titleFront">Mixed feelings — contradictory or conflicting emotions</div>
-        <div class="content"><span class="emoji" aria-hidden="true">🫨</span> If you have mixed feelings about something, you are uncertain because you have both positive and negative emotions.</div>
+
+    <!-- Карточка 1 -->
+    <div class="flashcard-side front-1" aria-labelledby="titleFront1" aria-describedby="descFront1">
+      <div class="title" id="titleFront1">
+        If you have 
+        <span 
+          class="interactive-blank" 
+          role="button" 
+          tabindex="0" 
+          aria-label="Интерактивный пробел, нажмите или нажмите Enter, чтобы увидеть ответ"
+          data-card="1"
+          id="blankArea1">&nbsp;</span> 
+        about something, you are uncertain because you have both positive and negative emotions.
       </div>
     </div>
-    <div class="flashcard-side flashcard-back" aria-labelledby="titleBack" aria-describedby="descBack">
-      <div class="content-wrapper">
-        <div class="title" id="titleBack">Example Usage</div>
-        <div class="content">After hearing the news, she had mixed feelings — happy for her friend but sad for herself.</div>
+    <div class="flashcard-side back-1" aria-labelledby="titleBack1" aria-describedby="descBack1">
+      <div class="title" id="titleBack1">
+        • <span class="key-phrase">mixed feelings</span> — contradictory or conflicting emotions
       </div>
     </div>
+
+    <!-- Карточка 2 -->
+    <div class="flashcard-side front-2" aria-labelledby="titleFront2" aria-describedby="descFront2">
+      <div class="title" id="titleFront2">
+        If you are
+        <span 
+          class="interactive-blank" 
+          role="button" 
+          tabindex="0" 
+          aria-label="Интерактивный пробел, нажмите или нажмите Enter, чтобы увидеть ответ"
+          data-card="2"
+          id="blankArea2">&nbsp;</span>
+        , you do not know what to do or say because you are confused or worried.
+      </div>
+    </div>
+    <div class="flashcard-side back-2" aria-labelledby="titleBack2" aria-describedby="descBack2">
+      <div class="title" id="titleBack2">
+        Be at a loss — to feel confused or uncertain about what to do
+      </div>
+    </div>
+
   </div>
 </div>
 
-<button id="toggleBtn" aria-pressed="false" aria-label="Show example usage">Next</button>
-
 <script>
-  const wrapper = document.getElementById('flashcardsWrapper');
-  const btn = document.getElementById('toggleBtn');
-  let shownBack = false;
-
-  btn.addEventListener('click', () => {
-    shownBack = !shownBack;
-    if (shownBack) {
-      wrapper.style.transform = 'translateX(-360px)';
-      btn.textContent = 'Back';
-      btn.setAttribute('aria-label', 'Show definition');
-    } else {
-      wrapper.style.transform = 'translateX(0)';
-      btn.textContent = 'Next';
-      btn.setAttribute('aria-label', 'Show example usage');
-    }
-    btn.setAttribute('aria-pressed', shownBack);
+  // Логика раскрытия интерактивных пробелов
+  document.querySelectorAll('.interactive-blank').forEach(item => {
+    item.addEventListener('click', () => revealAnswer(item));
+    item.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        revealAnswer(item);
+      }
+    });
   });
+
+  function revealAnswer(element) {
+    if (!element.classList.contains('revealed')) {
+      const card = element.getAttribute('data-card');
+
+      if (card === "1") {
+        element.textContent = 'mixed feelings';
+      } else if (card === "2") {
+        element.textContent = 'at a loss';
+      }
+      element.classList.add('revealed');
+    }
+  }
 </script>
 
 </body>
 </html>
+
+</div>
+</div>
+
+<button id="toggleBtn" aria-pressed="false" aria-label="Следующая сторона">Next</button>
+
+<script>
+  const wrapper = document.getElementById('flashcardsWrapper');
+  const btn = document.getElementById('toggleBtn');
+
+  // Все интерактивные пробелы (спаны) для обеих карточек
+  const blanks = {
+    1: document.getElementById('blankArea1'),
+    2: document.getElementById('blankArea2')
+  };
+
+  // Ответы для пробелов по карточкам
+  const answers = {
+    1: '<span class="key-phrase">mixed feelings</span>',
+    2: 'at a loss'
+  };
+
+  let currentCard = 1;     // индекс текущей карточки (1 или 2)
+  let showBack = false;    // показывается ли обратная сторона
+
+  function revealPhrase(cardNum) {
+    const blank = blanks[cardNum];
+    if (blank && !blank.classList.contains('revealed')) {
+      blank.classList.add('revealed');
+      blank.innerHTML = answers[cardNum];
+      blank.style.cursor = 'default';
+      blank.setAttribute('aria-label', answers[cardNum].replace(/<[^>]+>/g, ''));
+      blank.style.padding = '0';
+      blank.style.whiteSpace = 'normal';
+      blank.removeEventListener('click', blank._clickHandler);
+      blank.removeEventListener('keydown', blank._keyHandler);
+    }
+  }
+
+  function onBlankKeyDown(e) {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      const cardNum = parseInt(e.target.dataset.card, 10);
+      revealPhrase(cardNum);
+    }
+  }
+
+  function setupBlank(blank, cardNum) {
+    blank.classList.remove('revealed');
+    blank.innerHTML = '\u00A0';
+    blank.style.cursor = 'pointer';
+    blank.style.padding = '2px 10px';
+    blank.style.whiteSpace = 'nowrap';
+    blank.setAttribute('aria-label', 'Интерактивный пробел, нажмите или нажмите Enter, чтобы увидеть ответ');
+
+    // Обработчики для интерактивного пробела
+    const clickHandler = () => revealPhrase(cardNum);
+    const keyHandler = e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        revealPhrase(cardNum);
+      }
+    };
+    // Сохраним обработчики для последующего удаления
+    blank._clickHandler = clickHandler;
+    blank._keyHandler = keyHandler;
+
+    blank.addEventListener('click', clickHandler);
+    blank.addEventListener('keydown', keyHandler);
+  }
+
+  // Инициализация интерактивных пробелов
+  for (const cardNum in blanks) {
+    setupBlank(blanks[cardNum], parseInt(cardNum));
+  }
+
+  btn.addEventListener('click', () => {
+    if (!showBack) {
+      // Показать обратную сторону текущей карточки
+      const translateX = -((currentCard - 1) * 720 + 360);
+      wrapper.style.transform = `translateX(${translateX}px)`;
+      btn.textContent = 'Back';
+      btn.setAttribute('aria-label', 'Показать лицевую сторону');
+      btn.setAttribute('aria-pressed', 'true');
+      showBack = true;
+    } else {
+      // Показать лицевую сторону следующей карточки или первой, если была вторая
+      showBack = false;
+      currentCard++;
+      if (currentCard > 2) currentCard = 1;
+
+      const translateX = -((currentCard - 1) * 720);
+      wrapper.style.transform = `translateX(${translateX}px)`;
+      btn.textContent = 'Next';
+      btn.setAttribute('aria-label', 'Показать определение');
+      btn.setAttribute('aria-pressed', 'false');
+
+      // Сброс пробелов на лицевой стороне новой карточки
+      setupBlank(blanks[currentCard], currentCard);
+    }
+  });
+</script>
+</body>
+</html>    
