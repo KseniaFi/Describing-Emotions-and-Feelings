@@ -89,8 +89,13 @@
   .card-back {
     font-size: 1.15rem;
     line-height: 1.6;
-    background: transparent; /* Чтобы фон оставался фото */
+    /* сохраним фон с фото */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
     transform: rotateY(180deg);
+    box-shadow:
+      inset 0 0 120px rgba(0,0,0,0.65);
   }
 
   /* Контейнер для предложения и кликабельного пробела */
@@ -101,7 +106,7 @@
     overflow-wrap: break-word;
   }
 
-  /* Кнопка Show Answer на английском */
+  /* Кнопки next/back */
   .btn {
     margin-top: auto;
     align-self: center;
@@ -128,37 +133,38 @@
     top: -36px;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 1.3rem;
+    font-size: 1.5rem;
     font-weight: 700;
     color: #FF7F00;
     text-shadow:
-      0 0 12px #FF7F00,
-      0 0 15px #FF7F00;
+      0 0 14px #FF7F00,
+      0 0 18px #FF7F00;
     pointer-events: none;
     user-select: none;
     white-space: nowrap;
   }
 
-  /* Пробел прямоугольной формы с пульсирующим оранжевым свечением */
+  /* Пробел прямоугольной формы с большим размером и пульсирующим свечением */
   .blank-space {
     display: inline-block;
-    margin: 0 4px;
-    border-radius: 6px;
-    border: 2.5px solid #FFA500;
+    margin: 0 6px;
+    border-radius: 8px;
+    border: 3px solid #FFA500;
     background-color: rgba(255, 165, 0, 0.15);
     vertical-align: bottom;
     cursor: pointer;
     font-weight: 700;
     color: transparent;
     position: relative;
-    min-width: 90px;
-    max-width: 200px;
-    padding: 4px 8px;
+    min-width: 160px;
+    max-width: 280px;
+    padding: 10px 16px;
     text-align: center;
     transition: color 0.3s ease, background-color 0.3s ease;
     box-sizing: border-box;
     animation: pulseGlow 2.5s infinite ease-in-out alternate;
     user-select: none;
+    font-size: 1.2rem;
   }
 
   .blank-space.revealed {
@@ -170,15 +176,15 @@
 
   @keyframes pulseGlow {
     0% {
-      box-shadow: 0 0 8px 2px rgba(255, 140, 0, 0.7);
+      box-shadow: 0 0 12px 3px rgba(255, 140, 0, 0.7);
       background-color: rgba(255, 165, 0, 0.15);
     }
     50% {
-      box-shadow: 0 0 18px 6px rgba(255, 140, 0, 1);
+      box-shadow: 0 0 28px 8px rgba(255, 140, 0, 1);
       background-color: rgba(255, 165, 0, 0.3);
     }
     100% {
-      box-shadow: 0 0 8px 2px rgba(255, 140, 0, 0.7);
+      box-shadow: 0 0 12px 3px rgba(255, 140, 0, 0.7);
       background-color: rgba(255, 165, 0, 0.15);
     }
   }
@@ -915,7 +921,7 @@
 </div>
 
 <script>
-  // Обработчик клика на пробел
+  // Кликабельный пробел с подсказкой
   document.querySelectorAll('.blank-space').forEach(blank => {
     blank.addEventListener('click', e => {
       if (!blank.classList.contains('revealed')) {
@@ -928,7 +934,7 @@
     });
   });
 
-  // Показать ответ (перевернуть)
+  // Кнопка Next: переворот карточки
   document.querySelectorAll('.btn-show-answer').forEach(btn => {
     btn.addEventListener('click', e => {
       const card = e.target.closest('.card');
@@ -936,7 +942,7 @@
     });
   });
 
-  // Вернуться назад (перевернуть обратно и сбросить пробел)
+  // Кнопка Back: переворот обратно и сброс ключевого слова
   document.querySelectorAll('.btn-back').forEach(btn => {
     btn.addEventListener('click', e => {
       const card = e.target.closest('.card');
