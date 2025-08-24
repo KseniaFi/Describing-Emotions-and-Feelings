@@ -961,6 +961,8 @@
 
 </div>
   
+<button id="backToTop" class="btn">Back to Start</button>  
+  
 <script>
   // Кликабельный пробел с подсказкой
   document.querySelectorAll('.blank-space').forEach(blank => {
@@ -997,9 +999,8 @@
       }
     });
   });
-<button id="backToTop" class="btn">Back to Start</button>      
-<script>
-  document.getElementById('backToTop').addEventListener('click', function() {
+  
+document.getElementById('backToTop').addEventListener('click', function() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 </script>  
