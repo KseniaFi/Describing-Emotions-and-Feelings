@@ -87,7 +87,21 @@
       0 0 8px rgba(0,0,0,0.95),
       0 0 6px rgba(0,0,0,0.7);
   }
+.card-front, .card-back::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.5); /* затемнение */
+  z-index: 1;
+  pointer-events: none; /* клики проходят сквозь псевдоэлемент */
+}
 
+/* Чтобы текст был выше затемнения */
+.card-front > .sentence,
+.card-front > .btn {
+  position: relative;
+  z-index: 2;
+}
   .card-front {
     font-size: 1.3rem;
     line-height: 1.5;
