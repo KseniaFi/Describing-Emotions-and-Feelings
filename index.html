@@ -65,7 +65,7 @@
     transform: rotateY(180deg);
   }
 
-  /* Общие стили сторон */
+
   .card-front, .card-back {
     position: absolute;
     width: 100%;
@@ -88,6 +88,21 @@
       0 0 8px rgba(0,0,0,0.95),
       0 0 6px rgba(0,0,0,0.7);
   }
+  .card-front::before,
+.card-back::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.card-front > *,
+.card-back > * {
+  position: relative;
+  z-index: 2;
+}
   .card-front {
     font-size: 1.3rem;
     line-height: 1.5;
@@ -95,7 +110,6 @@
   .card-back {
     font-size: 1.15rem;
     line-height: 1.6;
-    /* сохраним фон с фото */
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -104,7 +118,7 @@
       inset 0 0 120px rgba(0,0,0,0.65);
   }
 
-  /* Контейнер для предложения и кликабельного пробела */
+  
   .sentence {
     position: relative;
     user-select: none;
@@ -112,7 +126,7 @@
     overflow-wrap: break-word;
   }
 
-  /* Кнопки next/back */
+  
   .btn {
     margin-top: auto;
     align-self: center;
@@ -133,7 +147,7 @@
     background: linear-gradient(45deg, #ffb347, #ff7f00);
   }
 
-  /* Надпись "click here" увеличенная */
+  
   .click-here {
     position: absolute;
     top: -36px;
@@ -150,7 +164,7 @@
     white-space: nowrap;
   }
 
-  /* Пробел прямоугольной формы с большим размером и пульсирующим свечением */
+  
   .blank-space {
     display: inline-block;
     margin: 0 6px;
