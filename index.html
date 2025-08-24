@@ -999,9 +999,24 @@
       }
     });
   });
-  
-document.getElementById('backToTop').addEventListener('click', function() {
+function resetAllCards() {
+    document.querySelectorAll('.card').forEach(card => {
+      card.classList.remove('flipped');
+      const blank = card.querySelector('.blank-space');
+      if (blank) {
+        blank.textContent = '';
+        blank.classList.remove('revealed');
+      }
+      const clickHere = card.querySelector('.click-here');
+      if (clickHere) {
+        clickHere.style.display = 'block';
+      }
+    });
+}  
+document.getElementById('backToTop').addEventListener('click', () => {
+    resetAllCards();
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    document.getElementById('backToTop').style.display = 'none';
   });
 </script>  
 </body>
