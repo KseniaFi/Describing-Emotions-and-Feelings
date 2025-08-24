@@ -1013,6 +1013,12 @@ function resetAllCards() {
       }
     });
 }  
+  const backToStartBtn = document.getElementById('backToTop');
+  backToStartBtn.addEventListener('click', () => {
+    resetAllCards();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    backToStartBtn.style.display = 'none'; // скрыть кнопку после нажатия
+  });
 document.getElementById('backToTop').addEventListener('click', () => {
     resetAllCards();
     window.scrollTo({ top: 0, behavior: 'smooth' });
