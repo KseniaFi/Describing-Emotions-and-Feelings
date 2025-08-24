@@ -1014,6 +1014,17 @@ function resetAllCards() {
     });
 }  
   const backToStartBtn = document.getElementById('backToTop');
+  document.querySelectorAll('.btn-show-answer').forEach(btn => {
+    btn.addEventListener('click', e => {
+      const card = e.target.closest('.card');
+      card.classList.add('flipped');
+      const cardIndex = Number(card.getAttribute('data-card'));
+      const totalCards = document.querySelectorAll('.card').length;
+      if (cardIndex === totalCards) {
+        backToStartBtn.style.display = 'block'; // показываем кнопку
+      }
+    });
+  });
   backToStartBtn.addEventListener('click', () => {
     resetAllCards();
     window.scrollTo({ top: 0, behavior: 'smooth' });
